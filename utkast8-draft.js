@@ -1,4 +1,5 @@
-// Denne versjonen er fra 26. oktober 2020
+// Denne versjonen er fra 15. januar 2021.
+// I stedet for to oscillatorer har den en volumkontroll og en oscillator.
 
 var DiffCamEngine = (function() {
 	var stream;					// stream obtained from webcam
@@ -15,6 +16,7 @@ var DiffCamEngine = (function() {
 	var initErrorCallback;		// called when init fails
 	var startCompleteCallback;	// called when start is complete
 	var captureCallback;		// called when an image has been captured and diffed
+	var captureCallback2;		// called when an image has been captured and diffed
 	var captureInterval;		// interval for continuous captures
 	var captureIntervalTime;	// time between captures, in ms
 	var captureWidth;			// full captured image width
@@ -24,6 +26,7 @@ var DiffCamEngine = (function() {
 	var isReadyToDiff;			// has a previous capture been made to diff against?
 	var pixelDiffThreshold;		// min for a pixel to be considered significant
 	var scoreThreshold;			// min for an image to be considered significant
+	var scoreThreshold2;			// min for an image to be considered significant
 	var includeMotionBox;		// flag to calculate and draw motion bounding box
 	var includeMotionPixels;	// flag to create object denoting pixels with motion
 
@@ -82,10 +85,11 @@ var DiffCamEngine = (function() {
 		captureIntervalTime = options.captureIntervalTime || 100;
 		captureWidth = options.captureWidth || 900;
 		captureHeight = options.captureHeight || 500;
-		diffWidth = options.diffWidth || 15;
+		diffWidth = options.diffWidth || 8;
 		diffHeight = options.diffHeight || 6;
 		pixelDiffThreshold = options.pixelDiffThreshold || 32;
 		scoreThreshold = options.scoreThreshold || 16;
+		scoreThreshold2 = options.scoreThreshold2 || 16;
 		includeMotionBox = options.includeMotionBox || false;
 		includeMotionPixels = options.includeMotionPixels || false;
 
@@ -94,6 +98,7 @@ var DiffCamEngine = (function() {
 		initErrorCallback = options.initErrorCallback || function() {};
 		startCompleteCallback = options.startCompleteCallback || function() {};
 		captureCallback = options.captureCallback || function() {};
+		captureCallback2 = options.captureCallback2 || function() {};
 
 		// non-configurable
 		captureCanvas = document.createElement('canvas');
@@ -110,7 +115,7 @@ var DiffCamEngine = (function() {
 		captureContext = captureCanvas.getContext('2d');
 
 		// prep diff canvas
-		diffCanvas.width = 2;
+		diffCanvas.width = 1;
 		diffCanvas.height = diffHeight;
 	
 		diffContext = diffCanvas.getContext('2d');
@@ -164,7 +169,7 @@ var DiffCamEngine = (function() {
 	function stop() {
 		clearInterval(captureInterval);
 		video.src = '';
-		motionContext.clearRect(0, 0, 2, diffHeight);
+		motionContext.clearRect(0, 0, 1, diffHeight);
 		isReadyToDiff = false;
 	}
 
@@ -234,15 +239,15 @@ var DiffCamEngine = (function() {
 					diff2.motionBox2.y.max - diff2.motionBox2.y.min
 				);
 			}
-/* 			captureCallback({
+			captureCallback2({
 				imageData2: captureImageData2,
 				score2: diff2.score2,
-				hasMotion2: diff2.score2 >= scoreThreshold,
+				hasMotion2: diff2.score2 >= 2,
 				motionBox2: diff2.motionBox2,
                 motionPixels2: diff2.motionPixels2,
                 
                 // bruke score fra her?		            
-			}); */
+			});
 		}
 
 		// draw current capture normally over diff, ready for next time
@@ -286,22 +291,24 @@ var DiffCamEngine = (function() {
 				}
 	
 			// using the x coords to change pitch	
-			xValue = coords.x * 10;	
+			// A simple volume control:
+			var xValue = (((i * (-1)) + 40) / 8) / 50;	
+			gainNode2.gain.value = xValue;
 
-			var o = ctx.createOscillator();
+/* 			var o = ctx.createOscillator();
 			o.type = oscType;
             o.connect(gainNode);
             gainNode.connect(ctx.destination);
 			o.frequency.value = xValue * 10;
 			oValue = o.frequency.value
             o.start(ctx.currentTime);
-			o.stop(ctx.currentTime + 0.6);
+			o.stop(ctx.currentTime + 0.6); */
 		
 			}
         }
 
 		return {
-			score: score,
+			score: xValue, 
 			motionBox: score > scoreThreshold ? motionBox : undefined,
 			motionPixels: motionPixels
         };  
@@ -341,7 +348,7 @@ var DiffCamEngine = (function() {
 			
 			// using the x coords to change pitch
 			
-			xValue2 = i2 * 10;
+			xValue2 = (((i2 * (-1)) + 40) / 8) * 50;
 			var o2 = ctx.createOscillator();
 			o2.type = oscType2;
             o2.connect(gainNode2);
@@ -354,8 +361,8 @@ var DiffCamEngine = (function() {
         }
 
 		return {
-			score2: score2,
-			motionBox2: score2 > scoreThreshold ? motionBox2 : undefined,
+			score2: xValue2,
+			motionBox2: score2 > scoreThreshold2 ? motionBox2 : undefined,
 			motionPixels2: motionPixels2
         };
 	}
@@ -448,7 +455,7 @@ var DiffCamEngine = (function() {
 	}
 
 	function getScoreThreshold2() {
-		return scoreThreshold;
+		return scoreThreshold2;
 	}
 
 	function setScoreThreshold(val) {
@@ -456,7 +463,7 @@ var DiffCamEngine = (function() {
 	}
 
 	function setScoreThreshold2(val) {
-		scoreThreshold = val;
+		scoreThreshold2 = val;
 	}
 
 	return {
