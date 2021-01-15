@@ -1,5 +1,6 @@
 // Denne versjonen er fra 15. januar 2021.
 // I stedet for to oscillatorer har den en volumkontroll og en oscillator.
+// Pitchen går fra lav til høy, fra venstre til høyre.
 
 var DiffCamEngine = (function() {
 	var stream;					// stream obtained from webcam
