@@ -110,8 +110,9 @@ var DiffCamEngine = (function() {
 		captureContext = captureCanvas.getContext('2d');
 
 		// prep diff canvas
-		diffCanvas.width = diffWidth;
-		diffCanvas.height = 1;
+		diffCanvas.width = 2;
+		diffCanvas.height = diffHeight;
+	
 		diffContext = diffCanvas.getContext('2d');
 		diffContext2 = diffCanvas2.getContext('2d');
 
@@ -163,7 +164,7 @@ var DiffCamEngine = (function() {
 	function stop() {
 		clearInterval(captureInterval);
 		video.src = '';
-		motionContext.clearRect(0, 0, diffWidth, 1);
+		motionContext.clearRect(0, 0, 2, diffHeight);
 		isReadyToDiff = false;
 	}
 
@@ -181,7 +182,7 @@ var DiffCamEngine = (function() {
 		diffContext.drawImage(video, 0, 0, diffWidth, diffHeight);
         diffContext2.drawImage(video, 0, 0, diffWidth, diffHeight);   
         
-        var diffImageData = diffContext.getImageData(0, 0, diffWidth, 1);
+        var diffImageData = diffContext.getImageData(0, 0, 2, diffHeight);
         // denne forskjellen er viktig. diffContext2 er essensiell.
 		var diffImageData2 = diffContext2.getImageData(0, 5, diffWidth, 1); // BEHOLD
         //*** behold */
