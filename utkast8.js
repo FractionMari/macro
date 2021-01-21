@@ -1,6 +1,7 @@
-// Denne versjonen er fra 15. januar 2021.
+// Denne versjonen er fra 21. januar 2021.
 // I stedet for to oscillatorer har den en volumkontroll og en oscillator.
 // Pitchen går fra lav til høy, fra venstre til høyre.
+// Kromatisk skala.
 
 var DiffCamEngine = (function() {
 	var stream;					// stream obtained from webcam
@@ -195,8 +196,13 @@ var DiffCamEngine = (function() {
 
 
 		if (isReadyToDiff) {
-			var diff = processDiff(diffImageData);
+            var diff = processDiff(diffImageData);
+            
+            // dette er volumet:
 // this is where you place the grid on the canvas
+// for å forklare hvor griden blir satt: det første tallet er y-aksen
+// og de andre tallet er x-aksen. Husk at bildet er speilvendt, så du teller fra venstre og bort.
+// Husk også at du starter på 0, så 5 blir nederste på y-aksen. Og 0 er bortese på y-aksen.
 			motionContext.putImageData(diffImageData, 0, 0);
 			if (diff.motionBox) {
 				motionContext.strokeStyle = '#fff';
@@ -260,7 +266,7 @@ var DiffCamEngine = (function() {
 
 	}
 
-
+// Den første her er volumet! husk det
 	function processDiff(diffImageData) {
 		
 		var rgba = diffImageData.data;
@@ -315,6 +321,7 @@ var DiffCamEngine = (function() {
         };  
 	}
 
+    // den andre her er pitchen!
 
 	function processDiff2(diffImageData2) {
 		
@@ -346,15 +353,33 @@ var DiffCamEngine = (function() {
 					motionPixels2 = calculateMotionPixels2(motionPixels2, coords2.x, coords2.y, pixelDiff2);			
 				}
 
-			
+
 			// using the x coords to change pitch
+
+			xValue2 = (((i2 * (-1)) + 40) / 4) - 2;
+
+			// xValue2 = (((i2 * (-1)) + 40) / 4) - 2; // This algorith gives values from 1-8. Can be useful.
+// CHROMATIC SCALE code snippet:
+// thanks to: https://gist.github.com/stuartmemo/3766449 for the following algorithm to get 
+// frequencies:
+
+			var getFrequency = function (note) {
+				var keyNumber = [1, 2, 3, 4, 5, 6, 7, 8];
+	
 			
-			xValue2 = (((i2 * (-1)) + 40) / 8) * 50;
+				keyNumber = keyNumber.indexOf(note);
+				// slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+				// Return frequency of note
+				return (440) * Math.pow(2, (keyNumber) / 12);
+			};
+			
+			var frequency = getFrequency(xValue2);
+////////////////			
 			var o2 = ctx.createOscillator();
 			o2.type = oscType2;
             o2.connect(gainNode2);
             gainNode2.connect(ctx.destination);
-			o2.frequency.value = xValue2 * 4.5;
+			o2.frequency.value = frequency;
             o2.start(ctx.currentTime);
 			o2.stop(ctx.currentTime + 0.6);
 		
@@ -362,7 +387,7 @@ var DiffCamEngine = (function() {
         }
 
 		return {
-			score2: xValue2,
+			score2: frequency,
 			motionBox2: score2 > scoreThreshold2 ? motionBox2 : undefined,
 			motionPixels2: motionPixels2
         };

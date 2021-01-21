@@ -1,19 +1,25 @@
-// Denne versjonen er fra 21. januar 2021.
+// Denne versjonen er fra 15. januar 2021.
 // I stedet for to oscillatorer har den en volumkontroll og en oscillator.
 // Pitchen går fra lav til høy, fra venstre til høyre.
-// Kromatisk skala.
+// 
+// Pluss et mislykket forsøk på å tracke scoren til den ene canbasen... Ender opp ed dobelt opp av alt.. Det var ikke nødvendig. score-mysteriet lå i diffcam1.js-fila.
 
+// Lærdom: det som er gult, feks. putImageData skal ikke endres til f.eks. "putImageData2".
 var DiffCamEngine = (function() {
 	var stream;					// stream obtained from webcam
 	var video;					// shows stream
 	var captureCanvas;			// internal canvas for capturing full images from video
+	var captureCanvas2;			// internal canvas for capturing full images from video
 	var captureContext;			// context for capture canvas
+	var captureContext2;			// context for capture canvas
 	var diffCanvas;				// internal canvas for diffing downscaled captures
 	var diffCanvas2;				// internal canvas for diffing downscaled captures BEHOLD
 	var diffContext;			// context for diff canvas
 	var diffContext2;			// context for diff canvas. BEHOLD
-	var motionCanvas;			// receives processed diff images
-	var motionContext;			// context for motion canvas
+    var motionCanvas;			// receives processed diff images
+    var motionCanvas2;			// receives processed diff images
+    var motionContext;			// context for motion canvas
+    var motionContext2;			// context for motion canvas
 	var initSuccessCallback;	// called when init succeeds
 	var initErrorCallback;		// called when init fails
 	var startCompleteCallback;	// called when start is complete
@@ -26,11 +32,14 @@ var DiffCamEngine = (function() {
 	var diffWidth;				// downscaled width for diff/motion
 	var diffHeight;				// downscaled height for diff/motion
 	var isReadyToDiff;			// has a previous capture been made to diff against?
-	var pixelDiffThreshold;		// min for a pixel to be considered significant
+    var pixelDiffThreshold;		// min for a pixel to be considered significant
+    var pixelDiffThreshold2;		// min for a pixel to be considered significant
 	var scoreThreshold;			// min for an image to be considered significant
 	var scoreThreshold2;			// min for an image to be considered significant
-	var includeMotionBox;		// flag to calculate and draw motion bounding box
-	var includeMotionPixels;	// flag to create object denoting pixels with motion
+    var includeMotionBox;		// flag to calculate and draw motion bounding box
+    var includeMotionBox2;		// flag to calculate and draw motion bounding box
+    var includeMotionPixels;	// flag to create object denoting pixels with motion
+    var includeMotionPixels2;	// flag to create object denoting pixels with motion
 
 
     // Audio variables
@@ -89,11 +98,14 @@ var DiffCamEngine = (function() {
 		captureHeight = options.captureHeight || 500;
 		diffWidth = options.diffWidth || 8;
 		diffHeight = options.diffHeight || 6;
-		pixelDiffThreshold = options.pixelDiffThreshold || 32;
+        pixelDiffThreshold = options.pixelDiffThreshold || 32;
+        pixelDiffThreshold2 = options.pixelDiffThreshold2 || 32;
 		scoreThreshold = options.scoreThreshold || 16;
 		scoreThreshold2 = options.scoreThreshold2 || 16;
-		includeMotionBox = options.includeMotionBox || false;
-		includeMotionPixels = options.includeMotionPixels || false;
+        includeMotionBox = options.includeMotionBox || false;
+        includeMotionBox2 = options.includeMotionBox2 || false;
+        includeMotionPixels = options.includeMotionPixels || false;
+        includeMotionPixels2 = options.includeMotionPixels2 || false;
 
 		// callbacks
 		initSuccessCallback = options.initSuccessCallback || function() {};
@@ -104,6 +116,7 @@ var DiffCamEngine = (function() {
 
 		// non-configurable
 		captureCanvas = document.createElement('canvas');
+		captureCanvas2 = document.createElement('canvas');
 		diffCanvas = document.createElement('canvas');
 		diffCanvas2 = document.createElement('canvas');
 		isReadyToDiff = false;
@@ -116,6 +129,11 @@ var DiffCamEngine = (function() {
 		captureCanvas.height = captureHeight;
 		captureContext = captureCanvas.getContext('2d');
 
+				// prep capture canvas2
+		captureCanvas2.width  = captureWidth;
+		captureCanvas2.height = captureHeight;
+		captureContext2 = captureCanvas2.getContext('2d');
+
 		// prep diff canvas
 		diffCanvas.width = 1;
 		diffCanvas.height = diffHeight;
@@ -127,7 +145,7 @@ var DiffCamEngine = (function() {
 		motionCanvas.width = diffWidth;
 		motionCanvas.height = diffHeight;
 		motionContext = motionCanvas.getContext('2d');
-
+		motionContext2 = motionCanvas.getContext('2d');
 		requestWebcam();
 	}
 
@@ -171,7 +189,8 @@ var DiffCamEngine = (function() {
 	function stop() {
 		clearInterval(captureInterval);
 		video.src = '';
-		motionContext.clearRect(0, 0, 1, diffHeight);
+        motionContext.clearRect(0, 0, 1, diffHeight);
+        motionContext2.clearRect(0, 0, 1, diffHeight);
 		isReadyToDiff = false;
 	}
 
@@ -179,7 +198,7 @@ var DiffCamEngine = (function() {
 		// save a full-sized copy of capture
 		captureContext.drawImage(video, 0, 0, captureWidth, 1);
 		var captureImageData = captureContext.getImageData(0, 0, captureWidth, 1);
-		var captureImageData2 = captureContext.getImageData(0, 5, captureWidth, 1);
+		var captureImageData2 = captureContext2.getImageData(0, 5, 1, captureHeight);
 
         //*** behold  Koden her inne er esssensiell for oppdeling av vinduet******/
         // diff current capture over previous capture, leftover from last time
@@ -197,12 +216,8 @@ var DiffCamEngine = (function() {
 
 		if (isReadyToDiff) {
             var diff = processDiff(diffImageData);
-            
-            // dette er volumet:
+            var diff2 = processDiff2(diffImageData2);
 // this is where you place the grid on the canvas
-// for å forklare hvor griden blir satt: det første tallet er y-aksen
-// og de andre tallet er x-aksen. Husk at bildet er speilvendt, så du teller fra venstre og bort.
-// Husk også at du starter på 0, så 5 blir nederste på y-aksen. Og 0 er bortese på y-aksen.
 			motionContext.putImageData(diffImageData, 0, 0);
 			if (diff.motionBox) {
 				motionContext.strokeStyle = '#fff';
@@ -211,6 +226,17 @@ var DiffCamEngine = (function() {
 					diff.motionBox.y.min + 0.5,
 					diff.motionBox.x.max - diff.motionBox.x.min,
 					diff.motionBox.y.max - diff.motionBox.y.min
+				);
+            }
+            
+            motionContext2.putImageData(diffImageData2, 0, 5);
+			if (diff2.motionBox2) {
+				motionContext2.strokeStyle = '#fff';
+				motionContext2.strokeRect(
+					diff2.motionBox2.x.min + 0.5,
+					diff2.motionBox2.y.min + 0.5,
+					diff2.motionBox2.x.max - diff2.motionBox2.x.min,
+					diff2.motionBox2.y.max - diff2.motionBox2.y.min
 				);
 			}
 			captureCallback({
@@ -230,30 +256,29 @@ var DiffCamEngine = (function() {
 				}
 				            
             });
-            
-            var diff2 = processDiff2(diffImageData2);
+
+
 
 ///////// Canvas 2 ///////////
 
 // this is where you place the grid on the canvas
-			motionContext.putImageData(diffImageData2, 0, 5);
-			if (diff2.motionBox2) {
-				motionContext.strokeStyle = '#fff';
-				motionContext.strokeRect(
-					diff2.motionBox2.x.min + 0.5,
-					diff2.motionBox2.y.min + 0.5,
-					diff2.motionBox2.x.max - diff2.motionBox2.x.min,
-					diff2.motionBox2.y.max - diff2.motionBox2.y.min
-				);
-			}
+
 			captureCallback2({
 				imageData2: captureImageData2,
 				score2: diff2.score2,
-				hasMotion2: diff2.score2 >= 2,
+				hasMotion2: diff2.score2 >= scoreThreshold2,
 				motionBox2: diff2.motionBox2,
                 motionPixels2: diff2.motionPixels2,
                 
-                // bruke score fra her?		            
+                // bruke score fra her?		   
+                
+                getURL: function() {
+					return getCaptureUrl2(this.imageData2);
+				},
+				checkMotionPixel2: function(x, y) {
+					return checkMotionPixel2(this.motionPixels2, x, y)
+				}
+				            
 			});
 		}
 
@@ -266,7 +291,7 @@ var DiffCamEngine = (function() {
 
 	}
 
-// Den første her er volumet! husk det
+
 	function processDiff(diffImageData) {
 		
 		var rgba = diffImageData.data;
@@ -320,74 +345,44 @@ var DiffCamEngine = (function() {
 			motionPixels: motionPixels
         };  
 	}
-
-    // den andre her er pitchen!
-
 	function processDiff2(diffImageData2) {
 		
 		var rgba2 = diffImageData2.data;
 		// pixel adjustments are done by reference directly on diffImageData
 		var score2 = 0;
-		var motionPixels2 = includeMotionPixels ? [] : undefined;
+		var motionPixels2 = includeMotionPixels2 ? [] : undefined;
 		var motionBox2 = undefined;
       
         for (var i2 = 0; 
             i2 < rgba2.length; i2 += 4) {
 			var pixelDiff2 = rgba2[i2] * 0.9 + rgba2[i2 + 1] * 0.3 + rgba2[i2 + 2] * 0.3;
-			var normalized2 = Math.min(255, pixelDiff2 * (50 / pixelDiffThreshold));
-			     
+			var normalized2 = Math.min(255, pixelDiff2 * (50 / pixelDiffThreshold2));			     
 			rgba2[i2] = normalized2; // rød
 			rgba2[i2 + 1] = 0; // grønn
             rgba2[i2 + 2] = 0; // blå
-            rgba2[i2 + 3] = normalized2; // lysstyrke
-        
-			if (pixelDiff2 >= pixelDiffThreshold) {
+            rgba2[i2 + 3] = normalized2; // lysstyrke  
+			if (pixelDiff2 >= pixelDiffThreshold2) {
 				score2++;
 				coords2 = calculateCoordinates(i2 / 4);
-
-				if (includeMotionBox) {
+				if (includeMotionBox2) {
 					motionBox2 = calculateMotionBox2(motionBox2, coords2.x, coords2.y);
 				}
-
-				if (includeMotionPixels) {
+				if (includeMotionPixels2) {
 					motionPixels2 = calculateMotionPixels2(motionPixels2, coords2.x, coords2.y, pixelDiff2);			
 				}
-
-
-			// using the x coords to change pitch
-
-			xValue2 = (((i2 * (-1)) + 40) / 4) - 2;
-
-			// xValue2 = (((i2 * (-1)) + 40) / 4) - 2; // This algorith gives values from 1-8. Can be useful.
-// CHROMATIC SCALE code snippet:
-// thanks to: https://gist.github.com/stuartmemo/3766449 for the following algorithm to get 
-// frequencies:
-
-			var getFrequency = function (note) {
-				var keyNumber = [1, 2, 3, 4, 5, 6, 7, 8];
-	
-			
-				keyNumber = keyNumber.indexOf(note);
-				// slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
-				// Return frequency of note
-				return (440) * Math.pow(2, (keyNumber) / 12);
-			};
-			
-			var frequency = getFrequency(xValue2);
-////////////////			
+			// using the x coords to change pitch	
+			xValue2 = (((i2 * (-1)) + 40) / 8) * 50;
 			var o2 = ctx.createOscillator();
 			o2.type = oscType2;
             o2.connect(gainNode2);
             gainNode2.connect(ctx.destination);
-			o2.frequency.value = frequency;
+			o2.frequency.value = xValue2 * 4.5;
             o2.start(ctx.currentTime);
-			o2.stop(ctx.currentTime + 0.6);
-		
+			o2.stop(ctx.currentTime + 0.6);		
 			}
         }
-
 		return {
-			score2: frequency,
+			score2: score2,
 			motionBox2: score2 > scoreThreshold2 ? motionBox2 : undefined,
 			motionPixels2: motionPixels2
         };
@@ -450,6 +445,12 @@ var DiffCamEngine = (function() {
 		// may as well borrow captureCanvas
 		captureContext.putImageData(captureImageData, 0, 2);
 		return captureCanvas.toDataURL();
+    }
+    
+    function getCaptureUrl2(captureImageData2) {
+		// may as well borrow captureCanvas
+		captureContext2.putImageData(captureImageData2, 2, 0);
+		return captureCanvas2.toDataURL();
 	}
 
 	function checkMotionPixel(motionPixels, x, y) {
@@ -465,7 +466,7 @@ var DiffCamEngine = (function() {
 	}
 
 	function getPixelDiffThreshold2() {
-		return pixelDiffThreshold;
+		return pixelDiffThreshold2;
 	}
 
 	function setPixelDiffThreshold(val) {
@@ -473,7 +474,7 @@ var DiffCamEngine = (function() {
 	}
 
 	function setPixelDiffThreshold2(val) {
-		pixelDiffThreshold = val;
+		pixelDiffThreshold2 = val;
 	}
 
 	function getScoreThreshold() {
