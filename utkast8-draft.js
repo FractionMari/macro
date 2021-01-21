@@ -356,7 +356,7 @@ var DiffCamEngine = (function() {
 
 			// using the x coords to change pitch
 
-			xValue2 = (((i2 * (-1)) + 40) / 4) - 2;
+			xValue2 = (((i2 * (-1)) + 40) / 4) - 3;
 
 			// xValue2 = (((i2 * (-1)) + 40) / 4) - 2; // This algorith gives values from 1-8. Can be useful.
 // CHROMATIC SCALE code snippet:
@@ -364,10 +364,11 @@ var DiffCamEngine = (function() {
 // frequencies:
 
 			var getFrequency = function (note) {
-				var keyNumber = [1, 2, 3, 4, 5, 6, 7, 8];
-	
-			
-				keyNumber = keyNumber.indexOf(note);
+				var scaleKeys = [1, 3, 5, 6, 8, 10, 12, 13]; // for å få en skala
+				//var keyNumber = note - 1;
+				var keyNumber = scaleKeys[note]; // for å få en skala
+
+				//keyNumber = keyNumber.indexOf(note);
 				// slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
 				// Return frequency of note
 				return (440) * Math.pow(2, (keyNumber) / 12);
