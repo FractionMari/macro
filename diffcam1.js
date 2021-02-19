@@ -1,5 +1,6 @@
 var video = document.getElementById('video');
 var canvas = document.getElementById('motion');
+var canvas2 = document.getElementById('motion2');
 var score = document.getElementById('score');
 var score2 = document.getElementById('score2');
 var xValue = document.getElementById('xValue');
@@ -28,6 +29,7 @@ function capture2(payload2) {
 DiffCamEngine.init({
 	video: video,
 	motionCanvas: canvas,
+	motionCanvas2: canvas2,
 	initSuccessCallback: initSuccess,
 	initErrorCallback: initError,
 	captureCallback: capture,

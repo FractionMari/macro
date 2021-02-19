@@ -1,11 +1,5 @@
-// Denne versjonen er fra 21. januar 2021.
-// I stedet for to oscillatorer har den en volumkontroll og en oscillator.
-// Pitchen går fra lav til høy, fra venstre til høyre.
-// Kromatisk skala.
-
-/// neste steg blir å 
-/// neste steg blir nå å prøve med loops/samples.
-///
+// Denne versjonen er fra 9. februar 2021.
+// Med utgangspunkt i utkast1.8.js prøver jeg å bytte ut volum med et biquadFilter
 
 var DiffCamEngine = (function() {
 	var stream;					// stream obtained from webcam
@@ -44,6 +38,19 @@ var DiffCamEngine = (function() {
 	var oscType = undefined
 	var oscType2 = undefined
 
+    // Biquad filter variables:
+
+    var biquadFilter;
+    biquadFilter = ctx.createBiquadFilter();
+    
+    // Manipulate the Biquad filter
+
+    biquadFilter.type = "bandpass";
+    biquadFilter.frequency.value = 1000;
+    biquadFilter.Q.value = 1;
+    biquadFilter.detune.value = 100;
+
+    // volume variables
 	gainNode.gain.value = 0.01;
 	gainNode2.gain.value = 0.01;
     
@@ -303,8 +310,11 @@ var DiffCamEngine = (function() {
 	
 			// using the x coords to change pitch	
 			// A simple volume control:
-			var xValue = (((i * (-1)) + 40) / 8) / 50;	
-			gainNode2.gain.value = xValue;
+			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
+			//gainNode2.gain.value = xValue; //
+
+            var xValue = ((i * (-1)) + 50) * 100;	
+            biquadFilter.frequency.value = xValue;
 
 /* 			var o = ctx.createOscillator();
 			o.type = oscType;
@@ -382,11 +392,21 @@ var DiffCamEngine = (function() {
 ////////////////			
 			var o2 = ctx.createOscillator();
 			o2.type = oscType2;
-            o2.connect(gainNode2);
+            o2.connect(biquadFilter);
+            biquadFilter.connect(gainNode2);
             gainNode2.connect(ctx.destination);
 			o2.frequency.value = frequency;
             o2.start(ctx.currentTime);
-			o2.stop(ctx.currentTime + 0.6);
+			o2.stop(ctx.currentTime + 0.2);
+
+            var o = ctx.createOscillator();
+			o.type = oscType;
+            o.connect(biquadFilter);
+            biquadFilter.connect(gainNode);
+            gainNode.connect(ctx.destination);
+			o.frequency.value = frequency * 2;
+            o.start(ctx.currentTime);
+			o.stop(ctx.currentTime + 0.2);
 		
 			}
         }
