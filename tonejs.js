@@ -4,6 +4,7 @@
     const autoFilter = new Tone.AutoWah().connect(gainNode);
     const synth = new Tone.DuoSynth().connect(autoFilter);
     const synth2 = new Tone.AMSynth().connect(autoFilter);
+    const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster();
     gainNode.gain.value = 0.5;
     
 
@@ -60,8 +61,6 @@ document.getElementById("playAudio2").addEventListener("click", function(){
 });
 
 
-
-
 document.getElementById("mute").addEventListener("click", function(){
     gainNode.gain.rampTo(0, 0.2);
     
@@ -79,4 +78,3 @@ document.getElementById("mute").addEventListener("click", function(){
 
 });
 
-    ////////////////////////////////////////////////////////////////////////
