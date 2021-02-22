@@ -35,3 +35,5 @@ var getFrequency = function (note) {
     // Return frequency of note
     return (440) * Math.pow(2, (keyNumber) / 12);
 };
+
+
