@@ -1,0 +1,62 @@
+
+<!doctype html>
+<head>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+<title>Drumkit Rhythm | Web Audio API</title>
+
+<link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" />
+</head>
+
+<body>
+
+<div id="container">
+
+  <div id="nav">
+    <ul>
+      <li><a href="/samples">Samples</a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="header">
+    <h1><a href="/">Web Audio API</a></h1>
+  </div>
+
+
+  <div id="wrapper">
+    <div id="content">
+
+      
+<div class="post">
+  <h2>Drumkit Rhythm</h2>
+  <p>
+    Illustrating the API's precise timing model by playing back a simple rhythm.
+
+  </p>
+  <p>
+    <p><button style="display: block">Play/pause</button></p>
+
+    <p>Tempo:</p>
+    <input type="range" min="0" max="300" value="80" step="0.01" class="slider" id="tempo">
+
+<script src="https://webaudioapi.com/static/js/shared.js"></script>
+<script src="rhythm-sample.js"></script>
+<script>
+var sample = new RhythmSample();
+document.querySelector('button').addEventListener('click', function() {
+  sample.play();
+});
+</script>
+
+  </p>
+</div>
+
+
+    </div>
+
+  </div>
+
+
+  </body>
+</html>
