@@ -22,7 +22,7 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Denne versjonen er fra 22. februar 2021.
+// Denne versjonen er fra 25. februar 2021.
 // 
 
 var DiffCamEngine = (function() {
@@ -75,7 +75,7 @@ function init(options) {
 
         // GLOBAL SETTINGS
         video = options.video || document.createElement('video');
-        captureIntervalTime = options.captureIntervalTime || 10;
+        captureIntervalTime = options.captureIntervalTime || 2;
         captureWidth = options.captureWidth || 90;
         captureHeight = options.captureHeight || 50;
         pixelDiffThreshold = options.pixelDiffThreshold || 32;
@@ -143,26 +143,26 @@ function capture() {
     var captureImageData = captureContext.getImageData(0, 0, captureWidth, 1);
     diffContext.globalCompositeOperation = 'difference';
     diffContext.drawImage(video, 0, 0, diffWidth, diffHeight);
-    // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData = diffContext.getImageData(0, 0, 2, diffHeight);
+    // denne forskjellen er viktig. diffContext2 er essensiell. (x, x, vidden til bildet, høyden til bildet)
+    var diffImageData = diffContext.getImageData(0, 0, 1, diffHeight);
     //*** behold */
     // draw current capture normally over diff, ready for next time
     diffContext.globalCompositeOperation = 'source-over';
     diffContext.drawImage(video, 0, 0, diffWidth, diffHeight);
 
     // CANVAS 2:
-    var captureImageData2 = captureContext.getImageData(0, 0, captureWidth, 1);
+    var captureImageData2 = captureContext.getImageData(1, 1, captureWidth, 1);
     diffContext2.globalCompositeOperation = 'difference'; 
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);   
     // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData2 = diffContext2.getImageData(0, 0, diffWidth2, 1); // BEHOLD
+    var diffImageData2 = diffContext2.getImageData(1, 1, captureWidth, 1); // BEHOLD
     //*** behold */
     diffContext2.globalCompositeOperation = 'source-over';
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);
 
     if (isReadyToDiff) {     
         // Canvas 1 (Filter):
-        // this is where you place the grid on the canvas
+        // this is where you place the grid on the canvas (men det blir feil i forhold til bevegelsen)
         // for å forklare hvor griden blir satt: det første tallet er y-aksen
         // og de andre tallet er x-aksen. Husk at bildet er speilvendt, 
         // så du teller fra venstre og bort.
@@ -196,7 +196,7 @@ function capture() {
         // Canvas 2 (Oscillator):
         var diff2 = processDiff2(diffImageData2);
         // this is where you place the grid on the canvas
-        motionContext2.putImageData(diffImageData2, 0, 0);
+        motionContext2.putImageData(diffImageData2, 1, 1);
         if (diff2.motionBox) {
             motionContext2.strokeStyle = '#fff';
             motionContext2.strokeRect(
@@ -302,42 +302,85 @@ function capture() {
 
 			// using the x coords to change pitch
             // This function ouputs value 0-7:
-			xValue2 = (((i * (-1)) + 40) / 4) - 6;
+			xValue2 = (((i * (-1)) + 40) / 4) - 7;
 
-       
-
-            if (xValue2 != 1) 
-                player.stop(),
-                player2.start();
-
-            else 
-                player2.stop(),
-                player.start();
+            
 
 
-                    
-/*                 if (playing2 = false && xValue2 === 2)
-                    player2.start(),
-                    player.stop(),
-                    playing = false,
-                    playing2 = true;
 
-                else 
-                    player2.stop(),
-                    player.stop(),
-                    playing = false,
-                    playing2 = false; */
-                
-
-                
-                
+// kode fra sequencer
 
 
-			//var frequency = getFrequency(xValue2);
-            // Two oscillators		
-            console.log(xValue2);
-            //synth.frequency.value = frequency;
-            //synth2.frequency.value = frequency;
+
+
+const synths = [
+    new Tone.Sampler({
+      "C1" : "samples/001.wav"
+  }),
+  new Tone.Sampler({
+      "C2" : "samples/003.wav"
+  }),
+    
+  ];
+  
+
+  
+
+  
+  synths.forEach(synth => synth.connect(gainNode));
+  
+  //const $rows = document.body.querySelectorAll('div > div'),
+  notes = ['C2', 'E4'];
+  
+  
+  let noteOn = xValue2; 
+  let noteOn2 = xValue2 - 1;
+  let noteOn3 = xValue2 - 2;
+  let noteOn4 = xValue2 - 3;
+
+/*   console.log("noteOn:" + noteOn);
+  console.log("noteOn2:" + noteOn2);
+  console.log("noteOn3:" + noteOn3);
+  console.log("noteOn4:" + noteOn4); */
+
+    
+  let index = 0;
+  
+  Tone.Transport.scheduleRepeat(repeat, '2n');
+  Tone.Transport.start();
+  
+  function repeat(time) {
+    let step = index % 2;
+    for (let i = 0; i < 2; i++) {
+      //let synth = synths[i];
+          //note = notes[i],
+          //$row = $rows[i],
+          //$input = $row.querySelector(`input:nth-child(${step + 1})`);
+          //console.log($input.checked);
+          console.log(noteOn == 1);
+          console.log(noteOn2 == 1);
+          console.log(noteOn3 == 1);
+          console.log(noteOn4 == 1);
+
+      //if ($input.checked) synth.triggerAttackRelease(note, '8n', time);
+      if (noteOn) synths[1].triggerAttackRelease(notes[0], '8n', time);
+      if (noteOn2) synths[1].disconnect();
+      //if (noteOn3) synths[0].triggerAttackRelease(notes[0], '8n', time + 1);
+      //if (noteOn4) synths[0].disconnect();
+
+
+      
+      
+          
+    }
+    index++;
+  }
+
+
+
+// kode fra sequencer
+
+
 			}
         }
 		return {

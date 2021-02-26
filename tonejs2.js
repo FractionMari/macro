@@ -6,7 +6,7 @@
     //const synth2 = new Tone.AMSynth().connect(autoFilter);
     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
     const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
-    gainNode.gain.value = 0.5;
+    gainNode.gain.value = 0;
     player.loop = true;
     //player.autostart = true;
     player2.loop = true;
@@ -34,7 +34,7 @@ var getFrequency = function (note) {
 ////////////////////////////////////////////////////////////////////////
 document.getElementById("playAudio").addEventListener("click", function(){
     player.loop = true;
-    player.autostart = true;
+    
     
   if(this.className == 'is-playing'){
     this.className = "";
@@ -68,17 +68,17 @@ document.getElementById("playAudio2").addEventListener("click", function(){
 
 
 document.getElementById("mute").addEventListener("click", function(){
-    gainNode.gain.rampTo(0, 0.2);
+    gainNode.gain.rampTo(0.5, 0.2);
     
   if(this.className == 'is-playing'){
     this.className = "";
-    this.innerHTML = "MUTE"
-    gainNode.gain.rampTo(0.5, 0.2);
+    this.innerHTML = "UNMUTE"
+    gainNode.gain.rampTo(0, 0.2);
   }else{
     this.className = "is-playing";
-    this.innerHTML = "UNMUTE";
+    this.innerHTML = "MUTE";
 
-    gainNode.gain.rampTo(0, 0.2);
+    gainNode.gain.rampTo(0.5, 0.2);
 
   }
 
