@@ -76,8 +76,8 @@ function init(options) {
         // GLOBAL SETTINGS
         video = options.video || document.createElement('video');
         captureIntervalTime = options.captureIntervalTime || 10;
-        captureWidth = options.captureWidth || 90;
-        captureHeight = options.captureHeight || 50;
+        captureWidth = options.captureWidth || 900;
+        captureHeight = options.captureHeight || 500;
         pixelDiffThreshold = options.pixelDiffThreshold || 32;
         scoreThreshold = options.scoreThreshold || 16;
         initSuccessCallback = options.initSuccessCallback || function() {};
@@ -285,8 +285,8 @@ function capture() {
             i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
 			var normalized2 = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));
-			rgba[i] = normalized2; // rød
-			rgba[i + 1] = 0; // grønn
+			rgba[i] = 0; // rød
+			rgba[i + 1] = normalized2; // grønn
             rgba[i + 2] = 0; // blå
             rgba[i + 3] = normalized2; // lysstyrke
         
@@ -314,23 +314,6 @@ function capture() {
                 player2.stop(),
                 player.start();
 
-
-                    
-/*                 if (playing2 = false && xValue2 === 2)
-                    player2.start(),
-                    player.stop(),
-                    playing = false,
-                    playing2 = true;
-
-                else 
-                    player2.stop(),
-                    player.stop(),
-                    playing = false,
-                    playing2 = false; */
-                
-
-                
-                
 
 
 			//var frequency = getFrequency(xValue2);

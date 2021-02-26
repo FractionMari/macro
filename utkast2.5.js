@@ -76,8 +76,8 @@ function init(options) {
         // GLOBAL SETTINGS
         video = options.video || document.createElement('video');
         captureIntervalTime = options.captureIntervalTime || 10;
-        captureWidth = options.captureWidth || 90;
-        captureHeight = options.captureHeight || 50;
+        captureWidth = options.captureWidth || 900;
+        captureHeight = options.captureHeight || 500;
         pixelDiffThreshold = options.pixelDiffThreshold || 32;
         scoreThreshold = options.scoreThreshold || 16;
         initSuccessCallback = options.initSuccessCallback || function() {};

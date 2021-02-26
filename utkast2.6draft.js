@@ -363,9 +363,8 @@ const synths = [
           console.log(noteOn4 == 1);
 
       //if ($input.checked) synth.triggerAttackRelease(note, '8n', time);
-      if (noteOn) synths[1].triggerAttackRelease(notes[0], '8n', time);
-      if (noteOn2) synths[1].disconnect();
-      //if (noteOn3) synths[0].triggerAttackRelease(notes[0], '8n', time + 1);
+      if (noteOn == 1) synths[1].triggerAttackRelease(notes[0], '8n', time);
+      if (noteOn2 == 1) synths[0].triggerAttackRelease(notes[0], '8n', time + 1);
       //if (noteOn4) synths[0].disconnect();
 
 
