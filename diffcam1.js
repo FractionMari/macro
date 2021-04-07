@@ -5,7 +5,7 @@ var score = document.getElementById('score');
 var score2 = document.getElementById('score2');
 var xValue = document.getElementById('xValue');
 var yValue = document.getElementById('yValue');
-
+ 
 
 function initSuccess() {
 	DiffCamEngine.start();

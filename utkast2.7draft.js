@@ -22,7 +22,7 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Denne versjonen er fra 25. februar 2021.
+// 6. april 2021 starter jeg på en tredje versjon.
 // 
 
 var DiffCamEngine = (function() {
@@ -75,7 +75,7 @@ function init(options) {
 
         // GLOBAL SETTINGS
         video = options.video || document.createElement('video');
-        captureIntervalTime = options.captureIntervalTime || 2;
+        captureIntervalTime = options.captureIntervalTime || 10;
         captureWidth = options.captureWidth || 900;
         captureHeight = options.captureHeight || 500;
         pixelDiffThreshold = options.pixelDiffThreshold || 32;
@@ -209,8 +209,8 @@ function capture() {
         captureCallback2({
             imageData2: captureImageData2,
             // score2 her for å gi monitoring i HTMLen (husk også å legge til i diffcam1.js )
-            score2: diff2.score2,
-            hasMotion2: diff2.score2 >= 2,
+            score2: diff2.score,
+            hasMotion2: diff2.score >= 2,
             motionBox: diff2.motionBox,
             motionPixels: diff2.motionPixels,
         getURL: function() {
@@ -255,12 +255,20 @@ function capture() {
 			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
 			//gainNode2.gain.value = xValue; //
 
-            var xValue = (i * (-1)) + 249;	
+           // var xValue = (i * (-1)) + 249;	
+
+           // function for normalizin value to between 0 and 1.
+            var xValue = ((i * (-1)) + 125) / 125;
             // Scaling the number with generateScaleFunction
-            let filterScale = generateScaleFunction(0, 249, 15, 50);      
-            xValue = filterScale(xValue);
+            //let filterScale = generateScaleFunction(0, 249, 15, 50);  
+            console.log(xValue); 
+               
+
+            //xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
-            autoFilter.baseFrequency = xValue;
+            //autoFilter.baseFrequency = xValue;
+            freeverb.wet.value = xValue;
+            
 			}
         }
 
@@ -277,7 +285,7 @@ function capture() {
 		
 		var rgba = diffImageData2.data;
 		// pixel adjustments are done by reference directly on diffImageData
-		var score2 = 0;
+		var score = 0;
 		var motionPixels = includeMotionPixels2 ? [] : undefined;
 		var motionBox = undefined;
 
@@ -285,13 +293,13 @@ function capture() {
             i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
 			var normalized2 = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));
-			rgba[i] = normalized2; // rød
-			rgba[i + 1] = 0; // grønn
+			rgba[i] = 0; // rød
+			rgba[i + 1] = normalized2; // grønn
             rgba[i + 2] = 0; // blå
             rgba[i + 3] = normalized2; // lysstyrke
         
 			if (pixelDiff >= pixelDiffThreshold) {
-				score2++;
+				score++;
 				coords = calculateCoordinates(i / 4);
 				if (includeMotionBox2) {
 					motionBox = calculateMotionBox(motionBox, coords.x, coords.y);
@@ -304,11 +312,45 @@ function capture() {
             // This function ouputs value 0-7:
 			xValue2 = (((i * (-1)) + 40) / 4) - 7;
 
+       
+// hvis xvalue2 ikke er 1 mutes player, hvis valuen er 1 
+/*             if (xValue2 != 1) 
+                player.mute = true;
+
+            else 
+                player.mute = false;
+
+            if (xValue2 != 2) 
+  
+                player2.mute = true;
+
+            else 
+                player2.mute = false; */
+
+            if (xValue2 == 1) 
+                player2.mute = true,
+                player.mute = false;
+
+
+            if (xValue2 == 2) 
+
+                player2.mute = false;
+
+            if (xValue2 == 3) 
+                player2.mute = true,
+                player.mute = true;
+
+
+			//var frequency = getFrequency(xValue2);
+            // Two oscillators		
+            //console.log(xValue2);
+            //synth.frequency.value = frequency;
+            //synth2.frequency.value = frequency;
 			}
         }
 		return {
-			score2: xValue2,
-			motionBox: score2 > scoreThreshold ? motionBox : undefined,
+			score: xValue2,
+			motionBox: score > scoreThreshold ? motionBox : undefined,
 			motionPixels: motionPixels
         };
 	}
@@ -432,3 +474,132 @@ return function (x) {
     return offset + scale * x;
     };
 };
+
+
+// Tone.js variables
+// From micro
+var playerBuffers = new Tone.Buffers({
+	"drums" : "loops/drums1_80bpm.wav",
+	"bass" : "loops/bass1_80bpm.wav",
+	"arp" : "loops/arp_80bpm.wav",
+	"bass2" : "loops/bass2_80bpm.wav"
+}, function(){
+	//play one of the samples when they all load
+	player.buffer = playerBuffers.get("drums");
+	player.start();
+  player2.buffer = playerBuffers.get("bass");
+	player2.start();
+  player3.buffer = playerBuffers.get("arp");
+	player3.start();
+  player4.buffer = playerBuffers.get("bass2");
+	player4.start();
+});
+
+    
+    ///////// TONE.JS VARIABLES ///////////
+    const gainNode = new Tone.Gain().toMaster();
+    const autoFilter = new Tone.AutoWah().connect(gainNode);
+
+    const freeverb = new Tone.Freeverb().connect(gainNode);
+    //const synth = new Tone.DuoSynth().connect(autoFilter);
+    //const synth2 = new Tone.AMSynth().connect(autoFilter);
+  //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
+  //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
+
+const player = new Tone.Player().connect(freeverb);
+const player2 = new Tone.Player().connect(freeverb);
+const player3 = new Tone.Player().connect(gainNode);
+const player4 = new Tone.Player().connect(gainNode);
+
+player.loop = true;
+player2.loop = true;
+player3.loop = true;
+player4.loop = true;
+
+player.autostart = true;
+player2.autostart = true;
+player3.autostart = true;
+player4.autostart = true;
+
+player.mute = true;
+player2.mute = true;
+player3.mute = true;
+player4.mute = true;
+
+gainNode.gain.value = 0;
+
+
+
+// CHROMATIC SCALE code snippet:
+// thanks to: https://gist.github.com/stuartmemo/3766449 for the following algorithm to get 
+// frequencies:
+
+var getFrequency = function (note) {
+    var scaleKeys = [1, 3, 5, 6, 8, 10, 12, 13]; // for å få en skala
+    //var keyNumber = note - 1;
+    var keyNumber = scaleKeys[note]; // for å få en skala
+
+    //keyNumber = keyNumber.indexOf(note);
+    // slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+    // Return frequency of note
+    return (440) * Math.pow(2, (keyNumber) / 12);
+};
+
+
+////////////////////////////////////////////////////////////////////////
+////////// INTERACTING with HTML file //////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+document.getElementById("playAudio").addEventListener("click", function(){
+   
+    
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "Synth #1 OFF"
+
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "Synth #1 ON";
+
+
+  }
+
+});
+
+document.getElementById("playAudio2").addEventListener("click", function(){
+
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "Synth #2 OFF"
+
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "Synth #2 ON";
+
+
+  }
+
+});
+
+
+document.getElementById("mute").addEventListener("click", function(){
+    gainNode.gain.rampTo(0.5, 0.2);
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "UNMUTE"
+    gainNode.gain.rampTo(0, 0.2);
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "MUTE";
+
+    gainNode.gain.rampTo(0.5, 0.2);
+
+  }
+
+});
+
+
+
+
