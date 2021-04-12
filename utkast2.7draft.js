@@ -340,10 +340,12 @@ function capture() {
             if (xValue2 == 1) 
 
                 player.mute = false;
+                player5.mute = false;
 
             if (xValue2 == 2) 
 
                 player2.mute = false;
+                player6.mute = false;
 
             if (xValue2 == 5) 
 
@@ -353,7 +355,7 @@ function capture() {
 
                 player4.mute = false;
 
-            if (xValue2 == 5 && player.mute == false) 
+/*             if (xValue2 == 5 && player.mute == false) 
 
             player.mute = true;
 
@@ -367,10 +369,12 @@ function capture() {
 
             if (xValue2 == 2 && player4.mute == false) 
 
-            player4.mute = true;
+            player4.mute = true; */
 
 
             if (xValue2 == 3) 
+                player6.mute = true,
+                player5.mute = true,
                 player4.mute = true,
                 player3.mute = true,
                 player2.mute = true,
@@ -515,10 +519,12 @@ return function (x) {
 // Tone.js variables
 // From micro
 var playerBuffers = new Tone.Buffers({
-	"drums" : "loops/drums1_80bpm.wav",
-	"bass" : "loops/bass1_80bpm.wav",
-	"arp" : "loops/arp_80bpm.wav",
-	"bass2" : "loops/bass2_80bpm.wav"
+	"drums" : "loops/Long_drums1.wav", // "loops/drums1_80bpm.wav",
+	"bass" : "loops/long_bass1.wav", // bass1_80bpm.wav",
+	"arp" : "loops/Long_arp.wav", // arp_80bpm.wav",
+	"bass2" : "loops/Long_bass2.wav", // bass2_80bpm.wav"
+    "MetalSplash" : "loops/Long_MetalSplash.wav",
+    "piano" : "loops/Long_piano.wav"
 }, function(){
 	//play one of the samples when they all load
 	player.buffer = playerBuffers.get("drums");
@@ -529,6 +535,11 @@ var playerBuffers = new Tone.Buffers({
 	player3.start();
   player4.buffer = playerBuffers.get("bass2");
 	player4.start();
+    player5.buffer = playerBuffers.get("MetalSplash");
+	player5.start();
+    player6.buffer = playerBuffers.get("piano");
+	player6.start();
+
 });
 
     
@@ -546,21 +557,29 @@ const player = new Tone.Player().connect(gainNode);
 const player2 = new Tone.Player().connect(gainNode);
 const player3 = new Tone.Player().connect(gainNode);
 const player4 = new Tone.Player().connect(gainNode);
+const player5 = new Tone.Player().connect(gainNode);
+const player6 = new Tone.Player().connect(gainNode);
 
 player.loop = true;
 player2.loop = true;
 player3.loop = true;
 player4.loop = true;
+player5.loop = true;
+player6.loop = true;
 
 player.autostart = true;
 player2.autostart = true;
 player3.autostart = true;
 player4.autostart = true;
+player5.autostart = true;
+player6.autostart = true;
 
 player.mute = true;
 player2.mute = true;
 player3.mute = true;
 player4.mute = true;
+player5.mute = true;
+player6.mute = true;
 
 gainNode.gain.value = 0;
 
