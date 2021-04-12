@@ -336,12 +336,10 @@ function capture() {
             else 
                 player2.mute = false; */
 
-            if (xValue2 == 1) 
-                player4.mute = true,
-                player3.mute = true,
-                player2.mute = true,
-                player.mute = false;
 
+            if (xValue2 == 1) 
+
+                player.mute = false;
 
             if (xValue2 == 2) 
 
@@ -354,6 +352,23 @@ function capture() {
             if (xValue2 == 6) 
 
                 player4.mute = false;
+
+            if (xValue2 == 5 && player.mute == false) 
+
+            player.mute = true;
+
+            if (xValue2 == 6 && player2.mute == false) 
+
+            player2.mute = true;
+
+            if (xValue2 == 1 && player3.mute == false) 
+
+            player3.mute = true;
+
+            if (xValue2 == 2 && player4.mute == false) 
+
+            player4.mute = true;
+
 
             if (xValue2 == 3) 
                 player4.mute = true,
