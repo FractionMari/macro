@@ -155,7 +155,12 @@ function capture() {
     diffContext2.globalCompositeOperation = 'difference'; 
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);   
     // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData2 = diffContext2.getImageData(1, 1, captureWidth, 1); // BEHOLD
+
+    // The values inside the following line must be the same as in:  
+    // motionContext2.putImageData(diffImageData2, 1, 0);
+    // Those values will give only one line of pixels on the canvas: var diffImageData2 = diffContext2.getImageData(1, 1, diffWidth2, diffHeight2); // BEHOLD
+        
+    var diffImageData2 = diffContext2.getImageData(1, 0, diffWidth2, diffHeight2); // BEHOLD
     //*** behold */
     diffContext2.globalCompositeOperation = 'source-over';
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);
@@ -196,7 +201,11 @@ function capture() {
         // Canvas 2 (Oscillator):
         var diff2 = processDiff2(diffImageData2);
         // this is where you place the grid on the canvas
-        motionContext2.putImageData(diffImageData2, 1, 1);
+
+        // The values inside the following line must be the same as in:  
+        // var diffImageData2 = diffContext2.getImageData(1, 0, diffWidth2, diffHeight2); // BEHOLD.
+        // Those values will give only one line of pixels on the canvas:   motionContext2.putImageData(diffImageData2, 1, 1);
+        motionContext2.putImageData(diffImageData2, 1, 0);
         if (diff2.motionBox) {
             motionContext2.strokeStyle = '#fff';
             motionContext2.strokeRect(
@@ -310,7 +319,7 @@ function capture() {
 
 			// using the x coords to change pitch
             // This function ouputs value 0-7:
-			xValue2 = (((i * (-1)) + 40) / 4) - 7;
+			xValue2 = (((i * (-1)) + 40) / 4) - 3;
 
        
 // hvis xvalue2 ikke er 1 mutes player, hvis valuen er 1 
@@ -328,6 +337,8 @@ function capture() {
                 player2.mute = false; */
 
             if (xValue2 == 1) 
+                player4.mute = true,
+                player3.mute = true,
                 player2.mute = true,
                 player.mute = false;
 
@@ -336,7 +347,17 @@ function capture() {
 
                 player2.mute = false;
 
+            if (xValue2 == 5) 
+
+                player3.mute = false;
+
+            if (xValue2 == 6) 
+
+                player4.mute = false;
+
             if (xValue2 == 3) 
+                player4.mute = true,
+                player3.mute = true,
                 player2.mute = true,
                 player.mute = true;
 
@@ -506,8 +527,8 @@ var playerBuffers = new Tone.Buffers({
   //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
   //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
 
-const player = new Tone.Player().connect(freeverb);
-const player2 = new Tone.Player().connect(freeverb);
+const player = new Tone.Player().connect(gainNode);
+const player2 = new Tone.Player().connect(gainNode);
 const player3 = new Tone.Player().connect(gainNode);
 const player4 = new Tone.Player().connect(gainNode);
 
