@@ -335,32 +335,44 @@ function capture() {
 
             else 
                 player2.mute = false; */
+// idé: Mappe slik at når et slags mønster hender, f.eks. bare trommer har vært i 20 sek, eller ingenting er mutet, endres mappingen?
+// idé: total mengde farge i bildet avgjør mappingen
+// ide: parameteren, total mengde bevegelse i bildet er noe (slik appen var til å begynne med)
+// idé: Dele skjermen i flere vinduer, sånn at jeg kan ha kombinerte mappinger.
+// oppgave: *lage en buffering-logo/animasjon
+// oppgave: rydde koden
 
+
+// Parametre pr. nå: 
+//  * Tid
+//  * xValue, yValue
+// * xValue total bevegelse
+// * yValue total bevegelse
 
             if (xValue2 == 1) 
 
-                player.mute = false;
+                player.mute = false,
                 player4.mute = false;
 
             if (xValue2 == 2) 
 
-                player2.mute = false;
+                player2.mute = false,
                 player5.mute = false;
                 
             if (xValue2 == 3) 
-                player3.mute = false;
+                player3.mute = false,
                 player6.mute = false;
 
             if (xValue2 == 5) 
-            player.mute = true;
+            player.mute = true,
             player4.mute = true;
 
             if (xValue2 == 6) 
-            player2.mute = true;
+            player2.mute = true,
             player5.mute = true;
 
             if (xValue2 == 7) 
-            player3.mute = true;
+            player3.mute = true,
             player6.mute = true;
  
 
@@ -642,17 +654,16 @@ document.getElementById("playAudio2").addEventListener("click", function(){
 
 
 document.getElementById("mute").addEventListener("click", function(){
-    gainNode.gain.rampTo(0.5, 0.2);
+    
     
   if(this.className == 'is-playing'){
-    this.className = "";
-    this.innerHTML = "UNMUTE"
-    gainNode.gain.rampTo(0, 0.2);
-  }else{
-    this.className = "is-playing";
-    this.innerHTML = "MUTE";
-
+    this.className = "",
+    this.innerHTML = "MUTE",
     gainNode.gain.rampTo(0.5, 0.2);
+  }else{
+    this.className = "is-playing",
+    this.innerHTML = "UNMUTE",
+    gainNode.gain.rampTo(0, 0.2);
 
   }
 
