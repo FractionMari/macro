@@ -340,20 +340,29 @@ function capture() {
             if (xValue2 == 1) 
 
                 player.mute = false;
-                player5.mute = false;
+                player4.mute = false;
 
             if (xValue2 == 2) 
 
                 player2.mute = false;
+                player5.mute = false;
+                
+            if (xValue2 == 3) 
+                player3.mute = false;
                 player6.mute = false;
 
             if (xValue2 == 5) 
-
-                player3.mute = false;
+            player.mute = true;
+            player4.mute = true;
 
             if (xValue2 == 6) 
+            player2.mute = true;
+            player5.mute = true;
 
-                player4.mute = false;
+            if (xValue2 == 7) 
+            player3.mute = true;
+            player6.mute = true;
+ 
 
 /*             if (xValue2 == 5 && player.mute == false) 
 
@@ -372,13 +381,7 @@ function capture() {
             player4.mute = true; */
 
 
-            if (xValue2 == 3) 
-                player6.mute = true,
-                player5.mute = true,
-                player4.mute = true,
-                player3.mute = true,
-                player2.mute = true,
-                player.mute = true;
+
 
 
 			//var frequency = getFrequency(xValue2);
@@ -529,11 +532,11 @@ var playerBuffers = new Tone.Buffers({
 	//play one of the samples when they all load
 	player.buffer = playerBuffers.get("drums");
 	player.start();
-  player2.buffer = playerBuffers.get("bass");
+  player2.buffer = playerBuffers.get("bass2");
 	player2.start();
   player3.buffer = playerBuffers.get("arp");
 	player3.start();
-  player4.buffer = playerBuffers.get("bass2");
+  player4.buffer = playerBuffers.get("bass");
 	player4.start();
     player5.buffer = playerBuffers.get("MetalSplash");
 	player5.start();
@@ -553,12 +556,12 @@ var playerBuffers = new Tone.Buffers({
   //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
   //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
 
-const player = new Tone.Player().connect(gainNode);
-const player2 = new Tone.Player().connect(gainNode);
-const player3 = new Tone.Player().connect(gainNode);
-const player4 = new Tone.Player().connect(gainNode);
-const player5 = new Tone.Player().connect(gainNode);
-const player6 = new Tone.Player().connect(gainNode);
+const player = new Tone.Player().connect(freeverb);
+const player2 = new Tone.Player().connect(freeverb);
+const player3 = new Tone.Player().connect(freeverb);
+const player4 = new Tone.Player().connect(freeverb);
+const player5 = new Tone.Player().connect(freeverb);
+const player6 = new Tone.Player().connect(freeverb);
 
 player.loop = true;
 player2.loop = true;
