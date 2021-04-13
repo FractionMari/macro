@@ -275,7 +275,8 @@ function capture() {
 
             //xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
-            //autoFilter.baseFrequency = xValue;
+            autoFilter.baseFrequency = xValue;
+            freeverb.wet.value = xValue;
             freeverb.wet.value = xValue;
             
 			}
@@ -596,7 +597,7 @@ player4.mute = true;
 player5.mute = true;
 player6.mute = true;
 
-gainNode.gain.value = 0;
+gainNode.gain.value = 0.5;
 
 
 
@@ -625,11 +626,11 @@ document.getElementById("playAudio").addEventListener("click", function(){
     
   if(this.className == 'is-playing'){
     this.className = "";
-    this.innerHTML = "Synth #1 OFF"
+    this.innerHTML = "Effect #1 OFF"
 
   }else{
     this.className = "is-playing";
-    this.innerHTML = "Synth #1 ON";
+    this.innerHTML = "Effect #1 ON";
 
 
   }
@@ -641,11 +642,15 @@ document.getElementById("playAudio2").addEventListener("click", function(){
     
   if(this.className == 'is-playing'){
     this.className = "";
-    this.innerHTML = "Synth #2 OFF"
+    this.innerHTML = "Effect #2 OFF"
+
+
 
   }else{
     this.className = "is-playing";
-    this.innerHTML = "Synth #2 ON";
+    this.innerHTML = "Effect #2 ON";
+
+
 
 
   }
