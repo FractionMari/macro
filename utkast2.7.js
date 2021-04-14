@@ -277,7 +277,6 @@ function capture() {
             // This is where any value can be controlled by the number "i".
             autoFilter.baseFrequency = xValue;
             freeverb.wet.value = xValue;
-            freeverb.wet.value = xValue;
             
 			}
         }
@@ -340,6 +339,12 @@ function capture() {
 // idé: total mengde farge i bildet avgjør mappingen
 // ide: parameteren, total mengde bevegelse i bildet er noe (slik appen var til å begynne med)
 // idé: Dele skjermen i flere vinduer, sånn at jeg kan ha kombinerte mappinger.
+// effekter: 
+//  -tempo
+//  -pitch
+// 
+
+// oppgave: lage flere oppdelinger av skjermen
 // oppgave: *lage en buffering-logo/animasjon
 // oppgave: rydde koden
 
