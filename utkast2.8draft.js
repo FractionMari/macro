@@ -260,7 +260,7 @@ function capture() {
 				if (includeMotionPixels) {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
-                console.log(score / 32);
+             //   console.log(score);
 			// A simple volume control:
 			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
 			//gainNode2.gain.value = xValue; //
@@ -270,15 +270,27 @@ function capture() {
            // function for normalizin value to between 0 and 1.
             var xValue = ((i * (-1)) + 125) / 125;
             // Scaling the number with generateScaleFunction
-            //let filterScale = generateScaleFunction(0, 249, 15, 50);  
-           // console.log(xValue); 
-               
+            //let filterScale = generateScaleFunction(0, 249, 15, 50); 
+            var pitchValue = Math.floor(((i * (-1)) + 126) / 12.6);
+          // console.log(pitchValue); 
+           var frequency = getFrequency3(pitchValue, 2);
+           console.log(frequency);
+           synth.frequency.value = frequency;
+           synth.harmonicity.value = xValue * (-1);
+/*             if (score > 4)
+                plucky.triggerAttack(frequency, "+0.9");
+                */
 
             //xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
-            autoFilter.baseFrequency = xValue;
-            freeverb.wet.value = xValue;
-            freeverb.roomsize = score / 32;
+            autoFilter.Q.value = score / 40;
+            autoFilter.wet.value = xValue;
+            freeverb.wet.value = 0.1;
+            pitchShift.pitch = 0;
+            //freeverb.roomsize = score / 32;
+            if (score > 8)
+                pitchShift.pitch = Math.floor(score / 4);
+
             
 			}
         }
@@ -320,8 +332,13 @@ function capture() {
 				}
 
 			// using the x coords to change pitch
+
             // This function ouputs value 0-7:
 			xValue2 = (((i * (-1)) + 40) / 4) - 3;
+
+           // console.log(score);
+
+
             
 
        
@@ -342,6 +359,7 @@ function capture() {
 // idé: total mengde farge i bildet avgjør mappingen (score)
 // ide: parameteren, total mengde bevegelse i bildet er noe (slik appen var til å begynne med)
 // idé: Dele skjermen i flere vinduer, sånn at jeg kan ha kombinerte mappinger.
+// idé: Mulighet til å velge mellom flere looper
 // effekter: 
 //  -tempo
 //  -pitch
@@ -357,6 +375,35 @@ function capture() {
 //  * xValue, yValue
 // * xValue total bevegelse
 // * yValue total bevegelse
+
+let box1 = false;
+
+if (xValue2 == 1 && box1 == false) {
+    player.mute = false,
+    player4.mute = false,
+    box1 = true;
+
+}else{ (xValue2 == 1 && box1 == true)
+    player.mute = true,
+    player4.mute = true,
+    box1 = false;
+}
+
+let box2= false;
+
+if (xValue2 == 2 && box2 == false) {
+    player2.mute = false,
+    player5.mute = false,
+    box2 = true;
+
+}else{ (xValue2 == 2 && box2 == true)
+    player2.mute = true,
+    player5.mute = true,
+    box2 = false;
+}
+
+
+/* 
 
             if (xValue2 == 1) 
 
@@ -382,7 +429,16 @@ function capture() {
 
             if (xValue2 == 7) 
             player3.mute = true,
-            player6.mute = true;
+            player6.mute = true; */
+/* 
+            if (score >= 2)
+                player.mute = true,
+                player2.mute = true,
+                player3.mute = true,
+                player4.mute = true,
+                player5.mute = true,
+                player6.mute = true; */
+                    
  
 
 /*             if (xValue2 == 5 && player.mute == false) 
@@ -543,12 +599,12 @@ return function (x) {
 // Tone.js variables
 // From micro
 var playerBuffers = new Tone.Buffers({
-	"drums" : "loops/Long_drums1.wav", // "loops/drums1_80bpm.wav",
-	"bass" : "loops/long_bass1.wav", // bass1_80bpm.wav",
-	"arp" : "loops/Long_arp.wav", // arp_80bpm.wav",
-	"bass2" : "loops/Long_bass2.wav", // bass2_80bpm.wav"
-    "MetalSplash" : "loops/Long_MetalSplash.wav",
-    "piano" : "loops/Long_piano.wav"
+	"drums" : "loops/Long_drums1.mp3", // "loops/drums1_80bpm.wav",
+	"bass" : "loops/long_bass1.mp3", // bass1_80bpm.wav",
+	"arp" : "loops/Long_arp.mp3", // arp_80bpm.wav",
+	"bass2" : "loops/Long_bass2.mp3", // bass2_80bpm.wav"
+    "MetalSplash" : "loops/Long_MetalSplash.mp3",
+    "piano" : "loops/Long_piano.mp3"
 }, function(){
 	//play one of the samples when they all load
 	player.buffer = playerBuffers.get("drums");
@@ -570,20 +626,22 @@ var playerBuffers = new Tone.Buffers({
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toMaster();
     const autoFilter = new Tone.AutoWah().connect(gainNode);
-
+    const pitchShift = new Tone.PitchShift();
     const freeverb = new Tone.JCReverb().connect(gainNode);
     const delay = new Tone.FeedbackDelay(0.5);
-    //const synth = new Tone.DuoSynth().connect(autoFilter);
+    const synth = new Tone.DuoSynth().chain(delay, autoFilter);
+    const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
+
     //const synth2 = new Tone.AMSynth().connect(autoFilter);
   //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
   //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
 
-const player = new Tone.Player().chain(delay, freeverb);
-const player2 = new Tone.Player().chain(delay, freeverb);
-const player3 = new Tone.Player().chain(delay, freeverb);
-const player4 = new Tone.Player().chain(delay, freeverb);
-const player5 = new Tone.Player().chain(delay, freeverb);
-const player6 = new Tone.Player().chain(delay, freeverb);
+const player = new Tone.Player().chain(pitchShift, freeverb);
+const player2 = new Tone.Player().chain(pitchShift, freeverb);
+const player3 = new Tone.Player().chain(pitchShift, freeverb);
+const player4 = new Tone.Player().chain(pitchShift, freeverb);
+const player5 = new Tone.Player().chain(pitchShift, freeverb);
+const player6 = new Tone.Player().chain(pitchShift, freeverb);
 
 player.loop = true;
 player2.loop = true;
@@ -625,6 +683,24 @@ var getFrequency = function (note) {
     return (440) * Math.pow(2, (keyNumber) / 12);
 };
 
+var getFrequency2 = function (keyNumber) {
+    //keyNumber = keyNumber.indexOf(note);
+    // slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+    // Return frequency of note
+    return (440) * Math.pow(2, (keyNumber) / 12);
+};
+
+
+var getFrequency3 = function (note, transpose) {
+    var scaleKeys = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19]; // for å få en skala
+    //var keyNumber = note - 1;
+    var keyNumber = scaleKeys[note] + transpose; // for å få en skala
+
+    //keyNumber = keyNumber.indexOf(note);
+    // slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+    // Return frequency of note
+    return (220) * Math.pow(2, (keyNumber) / 12);
+};
 
 ////////////////////////////////////////////////////////////////////////
 ////////// INTERACTING with HTML file //////////////////////////////////
@@ -636,12 +712,12 @@ document.getElementById("playAudio").addEventListener("click", function(){
   if(this.className == 'is-playing'){
     this.className = "";
     this.innerHTML = "Effect #1 OFF"
-
-  }else{
+    synth.triggerAttack(); 
+  }
+  else{
     this.className = "is-playing";
     this.innerHTML = "Effect #1 ON";
-
-
+    synth.triggerRelease();
   }
 
 });
