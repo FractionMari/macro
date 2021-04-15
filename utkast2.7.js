@@ -22,7 +22,8 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// 6. april 2021 starter jeg på en tredje versjon.
+//  14. april 2021 prøver jeg å dele opp skjermen enda mer
+
 // 
 
 var DiffCamEngine = (function() {
@@ -245,9 +246,9 @@ function capture() {
 		for (var i = 0; i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
 			var normalized = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));         
-			rgba[i] = 0;
-			rgba[i + 1] = 0;
-            rgba[i + 2] = normalized;
+/* 			rgba[i] = normalized;
+			rgba[i + 1] = normalized;
+            rgba[i + 2] = normalized; */
             rgba[i + 3] = normalized;
 
 			if (pixelDiff >= pixelDiffThreshold) {
@@ -259,7 +260,7 @@ function capture() {
 				if (includeMotionPixels) {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
-	
+             //   console.log(score);
 			// A simple volume control:
 			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
 			//gainNode2.gain.value = xValue; //
@@ -269,14 +270,27 @@ function capture() {
            // function for normalizin value to between 0 and 1.
             var xValue = ((i * (-1)) + 125) / 125;
             // Scaling the number with generateScaleFunction
-            //let filterScale = generateScaleFunction(0, 249, 15, 50);  
-            console.log(xValue); 
-               
+            //let filterScale = generateScaleFunction(0, 249, 15, 50); 
+            var pitchValue = Math.floor(((i * (-1)) + 126) / 12.6);
+          // console.log(pitchValue); 
+           var frequency = getFrequency3(pitchValue, 2);
+           console.log(frequency);
+           synth.frequency.value = frequency;
+           synth.harmonicity.value = xValue * (-1);
+/*             if (score > 4)
+                plucky.triggerAttack(frequency, "+0.9");
+                */
 
             //xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
-            autoFilter.baseFrequency = xValue;
-            freeverb.wet.value = xValue;
+            autoFilter.Q.value = score / 40;
+            autoFilter.wet.value = xValue;
+            freeverb.wet.value = 0.1;
+            pitchShift.pitch = 0;
+            //freeverb.roomsize = score / 32;
+            if (score > 8)
+                pitchShift.pitch = Math.floor(score / 4);
+
             
 			}
         }
@@ -301,11 +315,11 @@ function capture() {
         for (var i = 0; 
             i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
-			var normalized2 = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));
-			rgba[i] = 0; // rød
-			rgba[i + 1] = normalized2; // grønn
+			var normalized = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));
+			rgba[i] = normalized; // rød
+			rgba[i + 1] = normalized; // grønn
             rgba[i + 2] = 0; // blå
-            rgba[i + 3] = normalized2; // lysstyrke
+            rgba[i + 3] = normalized; // lysstyrke
         
 			if (pixelDiff >= pixelDiffThreshold) {
 				score++;
@@ -318,8 +332,14 @@ function capture() {
 				}
 
 			// using the x coords to change pitch
+
             // This function ouputs value 0-7:
 			xValue2 = (((i * (-1)) + 40) / 4) - 3;
+
+           // console.log(score);
+
+
+            
 
        
 // hvis xvalue2 ikke er 1 mutes player, hvis valuen er 1 
@@ -336,9 +356,10 @@ function capture() {
             else 
                 player2.mute = false; */
 // idé: Mappe slik at når et slags mønster hender, f.eks. bare trommer har vært i 20 sek, eller ingenting er mutet, endres mappingen?
-// idé: total mengde farge i bildet avgjør mappingen
+// idé: total mengde farge i bildet avgjør mappingen (score)
 // ide: parameteren, total mengde bevegelse i bildet er noe (slik appen var til å begynne med)
 // idé: Dele skjermen i flere vinduer, sånn at jeg kan ha kombinerte mappinger.
+// idé: Mulighet til å velge mellom flere looper
 // effekter: 
 //  -tempo
 //  -pitch
@@ -354,6 +375,9 @@ function capture() {
 //  * xValue, yValue
 // * xValue total bevegelse
 // * yValue total bevegelse
+
+
+
 
             if (xValue2 == 1) 
 
@@ -380,6 +404,15 @@ function capture() {
             if (xValue2 == 7) 
             player3.mute = true,
             player6.mute = true;
+/* 
+            if (score >= 2)
+                player.mute = true,
+                player2.mute = true,
+                player3.mute = true,
+                player4.mute = true,
+                player5.mute = true,
+                player6.mute = true; */
+                    
  
 
 /*             if (xValue2 == 5 && player.mute == false) 
@@ -540,12 +573,12 @@ return function (x) {
 // Tone.js variables
 // From micro
 var playerBuffers = new Tone.Buffers({
-	"drums" : "loops/Long_drums1.wav", // "loops/drums1_80bpm.wav",
-	"bass" : "loops/long_bass1.wav", // bass1_80bpm.wav",
-	"arp" : "loops/Long_arp.wav", // arp_80bpm.wav",
-	"bass2" : "loops/Long_bass2.wav", // bass2_80bpm.wav"
-    "MetalSplash" : "loops/Long_MetalSplash.wav",
-    "piano" : "loops/Long_piano.wav"
+	"drums" : "loops/Long_drums1.mp3", // "loops/drums1_80bpm.wav",
+	"bass" : "loops/long_bass1.mp3", // bass1_80bpm.wav",
+	"arp" : "loops/Long_arp.mp3", // arp_80bpm.wav",
+	"bass2" : "loops/Long_bass2.mp3", // bass2_80bpm.wav"
+    "MetalSplash" : "loops/Long_MetalSplash.mp3",
+    "piano" : "loops/Long_piano.mp3"
 }, function(){
 	//play one of the samples when they all load
 	player.buffer = playerBuffers.get("drums");
@@ -567,19 +600,22 @@ var playerBuffers = new Tone.Buffers({
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toMaster();
     const autoFilter = new Tone.AutoWah().connect(gainNode);
+    const pitchShift = new Tone.PitchShift();
+    const freeverb = new Tone.JCReverb().connect(gainNode);
+    const delay = new Tone.FeedbackDelay(0.5);
+    const synth = new Tone.DuoSynth().chain(delay, autoFilter);
+    const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
 
-    const freeverb = new Tone.Freeverb().connect(gainNode);
-    //const synth = new Tone.DuoSynth().connect(autoFilter);
     //const synth2 = new Tone.AMSynth().connect(autoFilter);
   //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
   //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
 
-const player = new Tone.Player().connect(freeverb);
-const player2 = new Tone.Player().connect(freeverb);
-const player3 = new Tone.Player().connect(freeverb);
-const player4 = new Tone.Player().connect(freeverb);
-const player5 = new Tone.Player().connect(freeverb);
-const player6 = new Tone.Player().connect(freeverb);
+const player = new Tone.Player().chain(pitchShift, freeverb);
+const player2 = new Tone.Player().chain(pitchShift, freeverb);
+const player3 = new Tone.Player().chain(pitchShift, freeverb);
+const player4 = new Tone.Player().chain(pitchShift, freeverb);
+const player5 = new Tone.Player().chain(pitchShift, freeverb);
+const player6 = new Tone.Player().chain(pitchShift, freeverb);
 
 player.loop = true;
 player2.loop = true;
@@ -621,6 +657,24 @@ var getFrequency = function (note) {
     return (440) * Math.pow(2, (keyNumber) / 12);
 };
 
+var getFrequency2 = function (keyNumber) {
+    //keyNumber = keyNumber.indexOf(note);
+    // slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+    // Return frequency of note
+    return (440) * Math.pow(2, (keyNumber) / 12);
+};
+
+
+var getFrequency3 = function (note, transpose) {
+    var scaleKeys = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19]; // for å få en skala
+    //var keyNumber = note - 1;
+    var keyNumber = scaleKeys[note] + transpose; // for å få en skala
+
+    //keyNumber = keyNumber.indexOf(note);
+    // slice kutter ut en del av en liste. fra det første tallet til det andre, men ikke inkludert det andre.
+    // Return frequency of note
+    return (220) * Math.pow(2, (keyNumber) / 12);
+};
 
 ////////////////////////////////////////////////////////////////////////
 ////////// INTERACTING with HTML file //////////////////////////////////
@@ -632,12 +686,12 @@ document.getElementById("playAudio").addEventListener("click", function(){
   if(this.className == 'is-playing'){
     this.className = "";
     this.innerHTML = "Effect #1 OFF"
-
-  }else{
+    synth.triggerAttack(); 
+  }
+  else{
     this.className = "is-playing";
     this.innerHTML = "Effect #1 ON";
-
-
+    synth.triggerRelease();
   }
 
 });

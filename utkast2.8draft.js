@@ -376,34 +376,8 @@ function capture() {
 // * xValue total bevegelse
 // * yValue total bevegelse
 
-let box1 = false;
-
-if (xValue2 == 1 && box1 == false) {
-    player.mute = false,
-    player4.mute = false,
-    box1 = true;
-
-}else{ (xValue2 == 1 && box1 == true)
-    player.mute = true,
-    player4.mute = true,
-    box1 = false;
-}
-
-let box2= false;
-
-if (xValue2 == 2 && box2 == false) {
-    player2.mute = false,
-    player5.mute = false,
-    box2 = true;
-
-}else{ (xValue2 == 2 && box2 == true)
-    player2.mute = true,
-    player5.mute = true,
-    box2 = false;
-}
 
 
-/* 
 
             if (xValue2 == 1) 
 
@@ -429,7 +403,7 @@ if (xValue2 == 2 && box2 == false) {
 
             if (xValue2 == 7) 
             player3.mute = true,
-            player6.mute = true; */
+            player6.mute = true;
 /* 
             if (score >= 2)
                 player.mute = true,
