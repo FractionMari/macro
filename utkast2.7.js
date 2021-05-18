@@ -574,7 +574,7 @@ return function (x) {
 // From micro
 var playerBuffers = new Tone.Buffers({
 	"drums" : "loops/Long_drums1.mp3", // "loops/drums1_80bpm.wav",
-	"bass" : "loops/long_bass1.mp3", // bass1_80bpm.wav",
+	"bass" : "loops/Long_bass1.mp3", // bass1_80bpm.wav",
 	"arp" : "loops/Long_arp.mp3", // arp_80bpm.wav",
 	"bass2" : "loops/Long_bass2.mp3", // bass2_80bpm.wav"
     "MetalSplash" : "loops/Long_MetalSplash.mp3",

@@ -23,7 +23,84 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
  */
 
 // Denne versjonen er fra 22. februar 2021. Ryddet og stablet.
-// 
+// 18. mai: Forsøker å få det til å låte smoothere.Trigger attack-release i stedet for en kontinuerlig tone.
+
+// Tone JS variables:
+
+    
+    ///////// TONE.JS VARIABLES ///////////
+    const gainNode = new Tone.Gain().toMaster();
+    const pingPong = new Tone.PingPongDelay().connect(gainNode);
+    const autoFilter = new Tone.Phaser({
+      frequency: 15,
+      octaves: 2,
+      baseFrequency: 300
+    }).connect(pingPong);
+    const synth = new Tone.FMSynth().connect(autoFilter);
+    const synth2 = new Tone.AMSynth();
+    const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster();
+    gainNode.gain.value = 0.5;
+    
+
+////////////////////////////////////////////////////////////////////////
+////////// INTERACTING with HTML file //////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+document.getElementById("effects").addEventListener("click", function(){
+    synth2.connect(autoFilter);
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "Synth #2 OFF";
+    // something
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "Synth #2 ON";
+    //synth2.connect(autoFilter);
+
+  }
+
+});
+
+document.getElementById("playAudio2").addEventListener("click", function(){
+    synth2.connect(autoFilter);
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "Synth #2 OFF"
+    synth2.disconnect(autoFilter);
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "Synth #2 ON";
+    synth2.connect(autoFilter);
+
+  }
+
+});
+
+
+document.getElementById("mute").addEventListener("click", function(){
+    gainNode.gain.rampTo(0, 0.2);
+    
+  if(this.className == 'is-playing'){
+    this.className = "";
+    this.innerHTML = "MUTE"
+    gainNode.gain.rampTo(0.5, 0.2);
+  }else{
+    this.className = "is-playing";
+    this.innerHTML = "UNMUTE";
+
+    gainNode.gain.rampTo(0, 0.2);
+
+  }
+
+});
+
+
+
+/// DiffCam Variables:
+
+
 
 var DiffCamEngine = (function() {
 
@@ -303,16 +380,33 @@ function capture() {
 				}
 
 			// using the x coords to change pitch
-            // This function ouputs value 0-7:
-			xValue2 = (((i * (-1)) + 40) / 4) - 3;
-			var frequency = getFrequency(xValue2);
-            // Two oscillators		
-            synth.frequency.value = frequency;
-            synth2.frequency.value = frequency;
+
+            // A function for activation of notes:
+console.log(i);
+// i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
+            if (i == 28)
+                synth.triggerAttackRelease("C3", "2n"),
+                synth2.triggerAttackRelease("E3", "2n");
+            else if (i == 24)
+                synth.triggerAttackRelease("D3", "2n"),
+                synth2.triggerAttackRelease("F3", "2n");
+            else if (i == 20)
+                synth.triggerAttackRelease("E3", "2n"),
+                synth2.triggerAttackRelease("G3", "2n");
+            else if (i == 16)
+                synth.triggerAttackRelease("F3", "2n"),
+                synth2.triggerAttackRelease("A3", "2n");
+            else if (i == 12)
+                synth.triggerAttackRelease("G3", "2n"),
+                synth2.triggerAttackRelease("B3", "2n");
+            else if (i == 8)
+                synth.triggerAttackRelease("A3", "2n"),
+                synth2.triggerAttackRelease("C3", "2n");
+
 			}
         }
 		return {
-			score: frequency,
+			score: i,
 			motionBox: score > scoreThreshold ? motionBox : undefined,
 			motionPixels: motionPixels
         };

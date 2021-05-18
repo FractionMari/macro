@@ -1,8 +1,13 @@
     
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toMaster();
-    const autoFilter = new Tone.AutoWah().connect(gainNode);
-    const synth = new Tone.DuoSynth().connect(autoFilter);
+    const pingPong = new Tone.PingPongDelay().connect(gainNode);
+    const autoFilter = new Tone.Phaser({
+      frequency: 15,
+      octaves: 2,
+      baseFrequency: 300
+    }).connect(pingPong);
+    const synth = new Tone.FMSynth().connect(autoFilter);
     const synth2 = new Tone.AMSynth().connect(autoFilter);
     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster();
     gainNode.gain.value = 0.5;
