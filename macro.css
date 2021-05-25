@@ -95,6 +95,24 @@ button:hover {
   color: #000000;
 }
 
+#synth1mute {
+
+  position: absolute;
+  border: none;
+  background: url('mute.svg') no-repeat top left 5%;
+  padding: 2px 8px;
+    top: 444px;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    color: #ffffff;
+}
+
 #playAudio3 {
 
   position: absolute;
