@@ -68,7 +68,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     const synth8 = new Tone.DuoSynth();
 
 /*     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster(); */
-    gainNode.gain.value = 0.5;
+    
     
 
 ////////////////////////////////////////////////////////////////////////
@@ -181,16 +181,16 @@ document.getElementById("playAudio3").addEventListener("click", function(){
       this.className = "is-playing2";
       this.innerHTML = "Membrane Synth"
       //
-      synth7.disconnect(gainSynth2);
-      synth8.connect(gainSynth2);
+      synth6.disconnect(gainSynth2);
+      synth7.connect(gainSynth2);
   
   }else if (this.className == 'is-playing2')
           
   {
     this.className = "is-playing3";
     this.innerHTML = "Duo Synth";
-    synth8.disconnect(gainSynth2);
-    synth5.connect(gainSynth2);
+    synth7.disconnect(gainSynth2);
+    synth8.connect(gainSynth2);
   
   
   }else if (this.className == 'is-playing3')
@@ -198,8 +198,8 @@ document.getElementById("playAudio3").addEventListener("click", function(){
   {
     this.className = "";
     this.innerHTML = "FM Synth";
-    synth5.disconnect(gainSynth2);
-    synth6.connect(gainSynth2);
+    synth8.disconnect(gainSynth2);
+    synth5.connect(gainSynth2);
   
   }
     
@@ -207,8 +207,8 @@ document.getElementById("playAudio3").addEventListener("click", function(){
       this.className = "is-playing";
       this.innerHTML = "Sampler Synth";
       //
-      synth6.disconnect(gainSynth2);
-      synth7.connect(gainSynth2);
+      synth5.disconnect(gainSynth2);
+      synth6.connect(gainSynth2);
   
   
     }
@@ -217,7 +217,7 @@ document.getElementById("playAudio3").addEventListener("click", function(){
 
 
 document.getElementById("mute").addEventListener("click", function(){
-    gainNode.gain.rampTo(0, 0.2);
+   
     
   if(this.className == 'is-playing'){
     this.className = "";
@@ -233,7 +233,13 @@ document.getElementById("mute").addEventListener("click", function(){
 
 });
 
+var slider = document.getElementById("volume");
 
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    console.log(this.value);
+    gainNode.gain.rampTo(this.value, 0.2);
+}
 
 /// DiffCam Variables:
 

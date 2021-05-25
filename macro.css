@@ -28,11 +28,12 @@ video, canvas {
 
 .center {
   position: relative;
-  width: 900px;
+  width: 1100px;
   height: auto;
   padding: 0;
   margin: auto;
   display: block;
+  background-color: #333;
 }
 
 .wrapper {
@@ -113,6 +114,113 @@ button:hover {
   background-color: rgba(251, 255, 0, 0.466);
   color: #000000;
 }
+
+#effect1 {
+
+  position: absolute;
+    top: 444px;
+    left: 1000px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#effect1:hover {
+  background-color: rgba(25, 0, 255, 0.479);
+  color: #000000;
+}
+
+#effect1 {
+
+  position: absolute;
+    top: 444px;
+    left: 1000px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#effect1:hover {
+  background-color: rgba(25, 0, 255, 0.479);
+  color: #000000;
+}
+
+#effect2 {
+
+  position: absolute;
+    top: 344px;
+    left: 1000px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#effect2:hover {
+  background-color: rgba(25, 0, 255, 0.479);
+  color: #000000;
+}
+
+#effect3 {
+
+  position: absolute;
+    top: 244px;
+    left: 1000px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#effect3:hover {
+  background-color: rgba(25, 0, 255, 0.479);
+  color: #000000;
+}
+
+#effect4 {
+
+  position: absolute;
+    top: 144px;
+    left: 1000px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#effect4:hover {
+  background-color: rgba(25, 0, 255, 0.479);
+  color: #000000;
+}
+
+
 #helpButton {
   padding: 5px 5px;
   position: absolute;
@@ -178,4 +286,47 @@ button:hover {
 
   font-size: 0px;
   color: #ffffff00;
+  }
+
+
+
+  .slidecontainer {
+    width: 100%; /* Width of the outside container */
+  }
+  
+  /* The slider itself */
+  .slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    vertical-align: middle;
+    width: 15%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #ff0077; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    border-radius: 50px;
+  }
+  
+  /* Mouse-over effects */
+  .slider:hover {
+    opacity: 5; /* Fully shown on mouse-over */
+  }
+  
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #ffffff; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 50px;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #ffffff; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 59px;
   }
