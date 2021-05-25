@@ -6,11 +6,35 @@
 
 		<title>Motionizer Prototype 2</title>
 
-		<link href="diffcam_draft.css" rel="stylesheet">
+		<link href="macro.css" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@200&display=swap" rel="stylesheet">
 	</head>
 	<body>
-        <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
-<h1> The motionizer Prototype no.3 - three canvases<h2>
+<script src="https://tonejs.github.io/build/Tone.js"></script>
+
+
+
+<h1> Macro v. 3<h2>
+
+<div class="center">
+  <div class="topnav">
+    <a href="./index.html">App 1</a>
+    <a href="./prototype2.html"> App 2</a>
+    <a class="active" href="./prototype3.html">App 3</a>
+	<button type="button" class="collapsible" id="helpButton">?</button>
+
+	    <div class="content">
+      <p>How to use this app:
+          <div class="dots">
+    
+        <li> Turn on your webcamera</li>
+		<li> Turn on your sound</li>
+		<li> Make movement to activate sound</li>
+      </div>
+      </p>
+    </div> 
+  </div>
 	<div class="wrapper">
 		<figure>
 			<video id="video" width="900" height="500"></video>
@@ -21,28 +45,36 @@
 		<figure>
 			<canvas id="motion2" width="900" height="500"></canvas>
 		</figure>
-        <figure>
-			<canvas id="motion3" width="900" height="500"></canvas>
-		</figure>
 	</div>
-Filter: <span id="score">?</span>
-<br>
-Pitch: <span id="score2">?</span>
-<br>
-Pitch2: <span id="score3">?</span>
-<br>
+
 <button id="playAudio">Effect #1</button>
 <button id="playAudio2">Effect #2</button>
 <button id="mute">MUTE</button>
+  </div>
 
- 
-
+      <div id="containerHidden">
+<H1> Hidden span variables:	</H1><span id="score2">?</span><span id="score">?</span>
+	</div>
+		<script src="prototype3.js"></script>
 		<script src="adapter-1.0.7.js"></script>
-		<!-- <script src="audio_variables.js"></script> -->
-		<!-- <script src="tonejs2.js"></script> -->
-		<script src="utkast2.8draft.js"></script>
-		<script src="diffcam3.js"></script>
-		<script src="../teoria-master/teoria.js"></script>
+		<script src="diffcam1.js"></script>
+				      <script>
+          var coll = document.getElementsByClassName("collapsible");
+          var i;
+          
+          for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+              this.classList.toggle("active");
+              var content = this.nextElementSibling;
+              if (content.style.display === "block") {
+                content.style.display = "none";
+              } else {
+                content.style.display = "block";
+              }
+            });
+          }
+          </script>
+
 
 	</body>
 </html>

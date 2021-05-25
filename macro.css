@@ -1,0 +1,181 @@
+body {
+	margin: 20px;
+  font: 1.5em/1.2 sans-serif;
+  font-family: 'Turret Road', cursive;
+  font-weight: 900;
+	text-align: center;
+  background-color: black;
+  color: #ff00dd; 
+}
+
+figure {
+	display: inline-block;
+	margin: 0px;
+	vertical-align: top;
+}
+
+video, canvas {
+	width: 900px;
+	height: 500px;
+	-moz-transform: scale(-1, 1);
+	-webkit-transform: scale(-1, 1);
+	-o-transform: scale(-1, 1);
+	transform: scale(-1, 1);
+	filter: FlipH;
+  border-radius: 12px;
+  image-rendering: pixelated;
+}
+
+.center {
+  position: relative;
+  width: 900px;
+  height: auto;
+  padding: 0;
+  margin: auto;
+  display: block;
+}
+
+.wrapper {
+  position: relative;
+  width: 900px;
+  height: 500px;
+  padding: 0;
+  margin: auto;
+  display: block;
+  text-align: left;
+
+}
+
+.wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+button {
+  background-color: #ff00dd;
+  border-radius: 0px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: bold;
+  display: inline-block;
+  font-family: 'Turret Road', cursive;
+  font-size: 20px;
+}
+
+button.active {
+  background-color: #333;
+}
+
+button:hover {
+  background-color: #333;
+  color: #ff00dd;
+}
+
+#playAudio2 {
+
+  position: absolute;
+    top: 444px;
+    left: 0px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    font-weight: 900;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd3f;
+    color: #ffffff;
+}
+
+#playAudio2:hover {
+  background-color: rgba(255, 0, 0, 0.479);
+  color: #000000;
+}
+
+#playAudio3 {
+
+  position: absolute;
+    top: 344px;
+    left: 0px;
+    width: 100px;
+    height: 100px;
+    border-radius: 0%;
+    font-size:20px;
+    padding: 5px 5px;
+    text-align:start;
+    background-color: #ff00dd38;
+    color: #ffffff;
+}
+
+#playAudio3:hover {
+  background-color: rgba(251, 255, 0, 0.466);
+  color: #000000;
+}
+#helpButton {
+  padding: 5px 5px;
+  position: absolute;
+  border-radius: 0px;
+  top: 3px;
+  right: 3px;
+  font-size: 22px;
+ 
+}
+
+.content {
+  padding: 18px;
+  display: none;
+  float: inline-end;
+  overflow: hidden;
+  color:rgb(255, 255, 255);
+  font-size: 17px;
+  font-variant: normal;
+  text-align: left;
+  margin: 0 auto;
+  width: auto;
+  max-width:300px;
+  height: auto;
+  background: rgb(0, 0, 0);
+  color: rgb(68, 7, 38) solid;
+  background-size: cover;
+}
+  
+.dots {
+  font-size: 13px;
+  text-align: left;
+  vertical-align: middle;    
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+    
+.topnav a {
+  float: center;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 10px 12px;
+  text-decoration: none;
+  font-size: 20px;
+  width: 600px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgb(197, 95, 184);
+  color: white;
+}
+    
+
+
+#containerHidden {
+
+  font-size: 0px;
+  color: #ffffff00;
+  }
