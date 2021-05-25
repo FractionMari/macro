@@ -39,10 +39,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
       baseFrequency: 300
     }).connect(gainNode);
     
-    const gainSynth1 = new Tone.Gain().connect(phaser);
-    const gainSynth2 = new Tone.Gain().connect(phaser);
+    const gainSynth1 = new Tone.Gain().connect(gainNode);
+    const gainSynth2 = new Tone.Gain().connect(gainNode);
 
-    const synth = new Tone.FMSynth().connect(gainSynth1).connect(gainSynth2);
+    const synth = new Tone.FMSynth().connect(gainSynth1);
     const synth2 = new Tone.Sampler({
         urls: {
             A1: "A1.mp3",
@@ -55,7 +55,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     const synth4 = new Tone.DuoSynth();
 
     /// Yellow line of synths:
-    const synth5 = new Tone.FMSynth().connect(gainSynth1).connect(gainSynth2);
+    const synth5 = new Tone.FMSynth().connect(gainSynth2);
     const synth6 = new Tone.Sampler({
         urls: {
             A1: "A1.mp3",
@@ -63,7 +63,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         },
         baseUrl: "https://tonejs.github.io/audio/casio/",
    
-    }).connect(gainSynth2);
+    });
     const synth7 = new Tone.MembraneSynth();
     const synth8 = new Tone.DuoSynth();
 
@@ -110,6 +110,26 @@ document.getElementById("effect2").addEventListener("click", function(){
       this.innerHTML = "PingPong: ON";
       gainSynth1.connect(pingPong);
       gainSynth2.connect(pingPong);
+  
+    }
+  
+  });
+
+  document.getElementById("effect3").addEventListener("click", function(){
+
+    
+    if(this.className == 'is-playing'){
+      this.className = "";
+      this.innerHTML = "Cheby: OFF";
+      gainSynth1.disconnect(cheby);
+      gainSynth2.disconnect(cheby);
+  
+    
+  }else{
+      this.className = "is-playing";
+      this.innerHTML = "Cheby: ON";
+      gainSynth1.connect(cheby);
+      gainSynth2.connect(cheby);
   
     }
   
