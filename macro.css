@@ -55,7 +55,7 @@ video, canvas {
 
 button {
   background-color: #ff00dd;
-  border-radius: 0px;
+  border-radius: 50px;
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -86,32 +86,15 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #playAudio2:hover {
-  background-color: rgba(255, 0, 0, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
-#synth1mute {
-
-  position: absolute;
-  border: none;
-  background: url('mute.svg') no-repeat top left 5%;
-  padding: 2px 8px;
-    top: 444px;
-    left: 50px;
-    width: 50px;
-    height: 50px;
-    border-radius: 0%;
-    font-size:20px;
-    font-weight: 900;
-    padding: 5px 5px;
-    text-align:start;
-    color: #ffffff;
-}
 
 #playAudio3 {
 
@@ -124,13 +107,13 @@ button:hover {
     font-size:20px;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd38;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #playAudio3:hover {
-  background-color: rgba(251, 255, 0, 0.466);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 #effect1 {
@@ -145,13 +128,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #effect1:hover {
-  background-color: rgba(25, 0, 255, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 #effect1 {
@@ -166,13 +149,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #effect1:hover {
-  background-color: rgba(25, 0, 255, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 #effect2 {
@@ -187,13 +170,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #effect2:hover {
-  background-color: rgba(25, 0, 255, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 #effect3 {
@@ -208,13 +191,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #effect3:hover {
-  background-color: rgba(25, 0, 255, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 #effect4 {
@@ -229,20 +212,22 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd3f;
+    background-color: #ff00dd;
     color: #ffffff;
 }
 
 #effect4:hover {
-  background-color: rgba(25, 0, 255, 0.479);
-  color: #000000;
+  background-color: #333;
+  color: #ff00dd;
 }
 
 
 #helpButton {
-  padding: 5px 5px;
+  padding: 10px 10px;
+  width: 50px;
+  height: 50px;
   position: absolute;
-  border-radius: 0px;
+  border-radius: 50%;
   top: 3px;
   right: 3px;
   font-size: 22px;
@@ -263,7 +248,7 @@ button:hover {
   max-width:300px;
   height: auto;
   background: rgb(0, 0, 0);
-  color: rgb(68, 7, 38) solid;
+  color: #ff00dd;
   background-size: cover;
 }
   
@@ -319,7 +304,7 @@ button:hover {
     vertical-align: middle;
     width: 15%; /* Full-width */
     height: 25px; /* Specified height */
-    background: #ff0077; /* Grey background */
+    background: #ff00dd; /* Grey background */
     outline: none; /* Remove outline */
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     border-radius: 50px;

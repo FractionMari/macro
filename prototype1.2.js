@@ -38,6 +38,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
       octaves: 2,
       baseFrequency: 300
     }).connect(gainNode);
+    const shift = new Tone.FrequencyShifter().connect(gainNode);
     
     const gainSynth1 = new Tone.Gain().connect(gainNode);
     const gainSynth2 = new Tone.Gain().connect(gainNode);
@@ -135,6 +136,26 @@ document.getElementById("effect2").addEventListener("click", function(){
   
   });
 
+  document.getElementById("effect4").addEventListener("click", function(){
+
+    
+    if(this.className == 'is-playing'){
+      this.className = "";
+      this.innerHTML = "Shift: OFF";
+      gainSynth1.disconnect(shift);
+      gainSynth2.disconnect(shift);
+  
+    
+  }else{
+      this.className = "is-playing";
+      this.innerHTML = "Shift: ON";
+      gainSynth1.connect(shift);
+      gainSynth2.connect(shift);
+  
+    }
+  
+  });
+
 
 document.getElementById("playAudio2").addEventListener("click", function(){
     
@@ -157,9 +178,16 @@ document.getElementById("playAudio2").addEventListener("click", function(){
 }else if (this.className == 'is-playing3')
         
 {
+  this.className = "is-playing4";
+  this.innerHTML = "MUTED";
+  synth4.disconnect(gainSynth1);
+
+
+}else if (this.className == 'is-playing4')
+        
+{
   this.className = "";
   this.innerHTML = "FM Synth";
-  synth4.disconnect(gainSynth1);
   synth.connect(gainSynth1);
 
 }
@@ -196,12 +224,18 @@ document.getElementById("playAudio3").addEventListener("click", function(){
   }else if (this.className == 'is-playing3')
           
   {
-    this.className = "";
-    this.innerHTML = "FM Synth";
+    this.className = "is-playing4";
+    this.innerHTML = "MUTED";
     synth8.disconnect(gainSynth2);
-    synth5.connect(gainSynth2);
   
-  }
+}else if (this.className == 'is-playing4')
+          
+{
+  this.className = "";
+  this.innerHTML = "FM Synth";
+  synth5.connect(gainSynth2);
+
+}
     
     else{
       this.className = "is-playing";
@@ -563,8 +597,12 @@ function capture() {
             phaser.frequency.value = xValue;
             
             let chebyValue = Math.floor((xValue / 10) * 100);
+            let harmonicityValue = Math.floor((xValue / 10) * 20);
             //console.log(chebyValue);
            cheby.order = chebyValue;
+           shift.frequency.value = xValue * 50;
+           synth4.harmonicity.value = chebyValue;
+           synth8.harmonicity.value = harmonicityValue;
            
 
             //phaser.baseFrequency.rampTo(xValue, 0.2);
