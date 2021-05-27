@@ -394,10 +394,13 @@ function capture() {
 				if (includeMotionPixels) {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
-                console.log(score * 10)
+                //console.log(score * 10)
+                let tempo = score * 10;
 
                 Tone.Transport.bpm.rampTo(tempo, 0.5);
-
+			// A simple volume control:
+			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
+			//gainNode2.gain.value = xValue; //
 
             var xValue = (i * (-1)) + 249;	
             // Scaling the number with generateScaleFunction
