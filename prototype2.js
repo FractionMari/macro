@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
     
     ///////// TONE.JS VARIABLES ///////////
-    const gainNode = new Tone.Gain().toMaster();
+    const gainNode = new Tone.Gain().toDestination();
     const pingPong = new Tone.PingPongDelay().connect(gainNode);
     const phaser = new Tone.Phaser({
       frequency: 15,
@@ -47,7 +47,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         baseUrl: "https://tonejs.github.io/audio/casio/",
    
     });
-    const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster();
+
     gainNode.gain.value = 0.5;
     
 
@@ -76,36 +76,13 @@ document.getElementById("effects").addEventListener("click", function(){
     // start/stop the oscllator every quarter note
     
     Tone.Transport.start();
-    
-/*   if(this.className == 'is-playing'){
-    this.className = "";
-    this.innerHTML = "Synth #2 OFF";
-    // something
-  }else{
-    this.className = "is-playing";
-    this.innerHTML = "Synth #2 ON"; */
-    //synth2.connect(phaser);
+
 
   
 
 });
 
-/* document.getElementById("effect1").addEventListener("click", function(){
 
-    
-  if(this.className == 'is-playing'){
-    this.className = "";
-    this.innerHTML = "Synth #2 OFF"
-    synth2.disconnect(phaser);
-  }else{
-    this.className = "is-playing";
-    this.innerHTML = "Synth #2 ON";
-    synth2.connect(phaser);
-
-  }
-
-});
- */
 
 document.getElementById("mute").addEventListener("click", function(){
     gainNode.gain.rampTo(0, 0.2);
@@ -295,7 +272,7 @@ function capture() {
     diffContext2.globalCompositeOperation = 'difference'; 
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);   
     // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData2 = diffContext2.getImageData(2, 4, diffWidth2, 1); // BEHOLD
+    var diffImageData2 = diffContext2.getImageData(0, 4, diffWidth2, 1); // BEHOLD
     //*** behold */
     diffContext2.globalCompositeOperation = 'source-over';
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);
@@ -339,7 +316,7 @@ function capture() {
         var diff2 = processDiff2(diffImageData2);
         // this is where you place the grid on the canvas
         
-        motionContext2.putImageData(diffImageData2, 2, 4);
+        motionContext2.putImageData(diffImageData2, 0, 4);
         if (diff2.motionBox) {
             motionContext2.strokeStyle = '#fff';
             motionContext2.strokeRect(
@@ -399,8 +376,7 @@ function capture() {
 
                 Tone.Transport.bpm.rampTo(tempo, 0.5);
 			// A simple volume control:
-			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
-			//gainNode2.gain.value = xValue; //
+
 
             var xValue = (i * (-1)) + 249;	
             // Scaling the number with generateScaleFunction
