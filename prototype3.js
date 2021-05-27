@@ -682,12 +682,12 @@ document.getElementById("playAudio").addEventListener("click", function(){
     
   if(this.className == 'is-playing'){
     this.className = "";
-    this.innerHTML = "Effect #1 ON"
+    this.innerHTML = "Synth: On"
     synth.triggerAttack(); 
   }
   else{
     this.className = "is-playing";
-    this.innerHTML = "Effect #1 OFF";
+    this.innerHTML = "Synth: Off";
     synth.triggerRelease();
   }
 
