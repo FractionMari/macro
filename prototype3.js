@@ -606,10 +606,7 @@ var playerBuffers = new Tone.Buffers({
     const synth = new Tone.DuoSynth().chain(delay, autoFilter);
     const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
 
-    //const synth2 = new Tone.AMSynth().connect(autoFilter);
-  //  const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").connect(gainNode);
-  //  const player2 = new Tone.Player("https://tonejs.github.io/audio/drum-samples/handdrum-loop.mp3").connect(gainNode);
-
+ 
 const player = new Tone.Player().chain(pitchShift, freeverb);
 const player2 = new Tone.Player().chain(pitchShift, freeverb);
 const player3 = new Tone.Player().chain(pitchShift, freeverb);
@@ -696,7 +693,7 @@ document.getElementById("playAudio").addEventListener("click", function(){
 
 });
 
-document.getElementById("playAudio2").addEventListener("click", function(){
+/* document.getElementById("playAudio2").addEventListener("click", function(){
 
     
   if(this.className == 'is-playing'){
@@ -715,7 +712,7 @@ document.getElementById("playAudio2").addEventListener("click", function(){
   }
 
 });
-
+ */
 
 document.getElementById("mute").addEventListener("click", function(){
     

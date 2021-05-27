@@ -22,7 +22,7 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Denne versjonen er fra 22. februar 2021. Ryddet og stablet.
+// Denne versjonen er fra 27. mai 2021. Ryddet og stablet.
 // 18. mai: Forsøker å få det til å låte smoothere.Trigger attack-release i stedet for en kontinuerlig tone.
 
 // Tone JS variables:
@@ -31,14 +31,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toMaster();
     const pingPong = new Tone.PingPongDelay().connect(gainNode);
-    const autoFilter = new Tone.Phaser({
+    const phaser = new Tone.Phaser({
       frequency: 15,
       octaves: 2,
       baseFrequency: 300
     }).connect(pingPong);
     const synth = new Tone.FMSynth();
     const synth2 = new Tone.AMSynth();
-    const synth3 = new Tone.PluckSynth();
+  //  const synth3 = new Tone.PluckSynth();
+    const synth3 = new Tone.Sampler({
+        urls: {
+            A1: "A1.mp3",
+            A2: "A2.mp3",
+        },
+        baseUrl: "https://tonejs.github.io/audio/casio/",
+   
+    });
     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster();
     gainNode.gain.value = 0.5;
     
@@ -69,35 +77,35 @@ document.getElementById("effects").addEventListener("click", function(){
     
     Tone.Transport.start();
     
-  if(this.className == 'is-playing'){
+/*   if(this.className == 'is-playing'){
     this.className = "";
     this.innerHTML = "Synth #2 OFF";
     // something
   }else{
     this.className = "is-playing";
-    this.innerHTML = "Synth #2 ON";
-    //synth2.connect(autoFilter);
+    this.innerHTML = "Synth #2 ON"; */
+    //synth2.connect(phaser);
 
-  }
+  
 
 });
 
-document.getElementById("playAudio2").addEventListener("click", function(){
-    synth2.connect(autoFilter);
+/* document.getElementById("effect1").addEventListener("click", function(){
+
     
   if(this.className == 'is-playing'){
     this.className = "";
     this.innerHTML = "Synth #2 OFF"
-    synth2.disconnect(autoFilter);
+    synth2.disconnect(phaser);
   }else{
     this.className = "is-playing";
     this.innerHTML = "Synth #2 ON";
-    synth2.connect(autoFilter);
+    synth2.connect(phaser);
 
   }
 
 });
-
+ */
 
 document.getElementById("mute").addEventListener("click", function(){
     gainNode.gain.rampTo(0, 0.2);
@@ -376,7 +384,7 @@ function capture() {
 			rgba[i + 1] = 0;
             rgba[i + 2] = normalized;
             rgba[i + 3] = normalized;
-            console.log(pixelDiff);
+            //console.log(pixelDiff);
 			if (pixelDiff >= pixelDiffThreshold) {
 				score++;
 				coords = calculateCoordinates(i / 4);
@@ -386,10 +394,10 @@ function capture() {
 				if (includeMotionPixels) {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
-	
-			// A simple volume control:
-			//var xValue = (((i * (-1)) + 40) / 8) / 50; //	
-			//gainNode2.gain.value = xValue; //
+                console.log(score * 10)
+
+                Tone.Transport.bpm.rampTo(tempo, 0.5);
+
 
             var xValue = (i * (-1)) + 249;	
             // Scaling the number with generateScaleFunction
@@ -397,8 +405,8 @@ function capture() {
             xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
             
-            autoFilter.frequency.value = xValue;
-            //autoFilter.baseFrequency.rampTo(xValue, 0.2);
+            phaser.frequency.value = xValue;
+            //phaser.baseFrequency.rampTo(xValue, 0.2);
 			}
         }
 
@@ -441,24 +449,24 @@ function capture() {
 			// using the x coords to change pitch
 
             // A function for activation of notes:
-console.log(i);
+//console.log(i);
 
 
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 28)
-                synth.connect(autoFilter);
+                synth.connect(phaser);
                 // synth2.triggerAttackRelease("E3", "2n");
 
             else if (i == 24)
-                synth2.connect(autoFilter);
+                synth2.connect(phaser);
             else if (i == 20)
-                synth3.connect(autoFilter);
+                synth3.connect(phaser);
              else if (i == 16)
-                synth.disconnect(autoFilter);
+                synth.disconnect(phaser);
             else if (i == 12)
-                synth2.disconnect(autoFilter);
+                synth2.disconnect(phaser);
             else if (i == 8)
-                synth3.disconnect(autoFilter);
+                synth3.disconnect(phaser);
 
 			}
         }
