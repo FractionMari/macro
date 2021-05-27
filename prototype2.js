@@ -295,7 +295,7 @@ function capture() {
     diffContext2.globalCompositeOperation = 'difference'; 
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);   
     // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData2 = diffContext2.getImageData(0, 4, diffWidth2, 1); // BEHOLD
+    var diffImageData2 = diffContext2.getImageData(2, 4, diffWidth2, 1); // BEHOLD
     //*** behold */
     diffContext2.globalCompositeOperation = 'source-over';
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);
@@ -339,7 +339,7 @@ function capture() {
         var diff2 = processDiff2(diffImageData2);
         // this is where you place the grid on the canvas
         
-        motionContext2.putImageData(diffImageData2, 0, 4);
+        motionContext2.putImageData(diffImageData2, 2, 4);
         if (diff2.motionBox) {
             motionContext2.strokeStyle = '#fff';
             motionContext2.strokeRect(
