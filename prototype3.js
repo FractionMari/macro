@@ -293,14 +293,16 @@ function capture() {
             var scaleSelect = ["D#0", "F#0", "G#0", "A#0", "C#1", "D#1", "F#1", "G#1", "A#1", "C#2", "D#2", "F#2", "G#2", "A#2","C#3", "D#3", "F#3", "G#3", "A#3","C#4", "D#4", "F#4", "G#4", "A#4", "C#5", "D#5", "F#5", "G#5", "A#5", "C#6"];
             pitchShift.pitch = Math.floor(score / 4);
             synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "2n");
-/* 
-            if (score > 8)
+
+/*             if (score > 8)
                 pitchShift.pitch = Math.floor(score / 4);
 
+            else 
+                pitchShift.pitch = 0; */
+
 			}
- */
-/*             else 
-              {pitchShift.pitch = 0;} */
+
+
         }
 
 		return {
