@@ -296,17 +296,9 @@ function capture() {
 
             synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "2n");
 
-            if (score == 20)
-                pitchShift.pitch = 4;
-
-            else if (score == 15)
+            if (score == 15)
                 pitchShift.pitch = 3;
 
-                else if (score == 10)
-                pitchShift.pitch = 2;
-
-                else if (score == 5)
-                pitchShift.pitch = 1;
 
                 else if (score == 1)
                 pitchShift.pitch = 0;
