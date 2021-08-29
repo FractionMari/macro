@@ -288,17 +288,19 @@ function capture() {
             freeverb.wet.value = 0.1;
             //pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
-            gainNode.gain.rampTo((score / 32), 0.2);
+            gainNode.gain.rampTo((score / 16), 0.2);
             console.log(((i * (-1)) / 4) + 32);
             var scaleSelect = ["D#0", "F#0", "G#0", "A#0", "C#1", "D#1", "F#1", "G#1", "A#1", "C#2", "D#2", "F#2", "G#2", "A#2","C#3", "D#3", "F#3", "G#3", "A#3","C#4", "D#4", "F#4", "G#4", "A#4", "C#5", "D#5", "F#5", "G#5", "A#5", "C#6"];
 
-            synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "4n");
+            synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "2n");
 
             if (score > 8)
                 pitchShift.pitch = Math.floor(score / 4);
 
-            
 			}
+
+            else 
+              {pitchShift.pitch = 0;}
         }
 
 		return {
@@ -608,6 +610,7 @@ var playerBuffers = new Tone.Buffers({
     const gainNode2 = new Tone.Gain().toMaster();
     const autoFilter = new Tone.AutoWah().connect(gainNode);
     const pitchShift = new Tone.PitchShift();
+    pitchShift.pitch = 0;
     const freeverb = new Tone.JCReverb().connect(gainNode);
     const delay = new Tone.FeedbackDelay(0.5);
 //    const synth = new Tone.DuoSynth().connect(gainNode2);
