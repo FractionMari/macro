@@ -288,9 +288,9 @@ function capture() {
             freeverb.wet.value = 0.1;
             pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
-            gainNode2.gain.rampTo((score / 64), 0.2);
+            gainNode.gain.rampTo((score / 32), 0.2);
             console.log(((i * (-1)) / 4) + 32);
-            var scaleSelect = ["D0", "F0", "G0", "A0", "C1", "D1", "F1", "G1", "A1", "C2", "D2", "F2", "G2", "A2","C3", "D3", "F3", "G3", "A3","C4", "D4", "F4", "G4", "A4", "C5", "D5", "F5", "G5", "A5", "C6"];
+            var scaleSelect = ["D#0", "F#0", "G#0", "A#0", "C#1", "D#1", "F#1", "G#1", "A#1", "C#2", "D#2", "F#2", "G#2", "A#2","C#3", "D#3", "F#3", "G#3", "A#3","C#4", "D#4", "F#4", "G#4", "A#4", "C#5", "D#5", "F#5", "G#5", "A#5", "C#6"];
 
             synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "4n");
 
@@ -622,7 +622,7 @@ var playerBuffers = new Tone.Buffers({
             sustain: 1.0,
             release: 0.8
         }
-    }).connect(gainNode2); 
+    }).connect(pitchShift); 
 
     const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
 
