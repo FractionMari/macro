@@ -274,9 +274,9 @@ function capture() {
             var pitchValue = Math.floor(((i * (-1)) + 126) / 12.6);
           // console.log(pitchValue); 
            var frequency = getFrequency3(pitchValue, 2);
-           console.log(frequency);
-           synth.frequency.value = frequency;
-           synth.harmonicity.value = xValue * (-1);
+           //console.log(frequency);
+           //synth.frequency.value = frequency;
+           //synth.harmonicity.value = xValue * (-1);
 /*             if (score > 4)
                 plucky.triggerAttack(frequency, "+0.9");
                 */
@@ -288,8 +288,13 @@ function capture() {
             freeverb.wet.value = 0.1;
             pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
+            gainNode2.gain.rampTo((score / 64), 0.2);
+            console.log(((i * (-1)) / 4) + 32);
+            var scaleSelect = ["D0", "F0", "G0", "A0", "C1", "D1", "F1", "G1", "A1", "C2", "D2", "F2", "G2", "A2","C3", "D3", "F3", "G3", "A3","C4", "D4", "F4", "G4", "A4", "C5", "D5", "F5", "G5", "A5", "C6"];
+
+            synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "4n");
+
             if (score > 8)
-                gainNode2.gain.rampTo(0, 0.2),
                 pitchShift.pitch = Math.floor(score / 4);
 
             
@@ -337,7 +342,7 @@ function capture() {
             // This function ouputs value 0-7:
 			xValue2 = (((i * (-1)) + 40) / 4) - 3;
 
-           // console.log(score);
+           //console.log(score);
 
 
             
@@ -605,7 +610,20 @@ var playerBuffers = new Tone.Buffers({
     const pitchShift = new Tone.PitchShift();
     const freeverb = new Tone.JCReverb().connect(gainNode);
     const delay = new Tone.FeedbackDelay(0.5);
-    const synth = new Tone.DuoSynth().connect(gainNode2);
+//    const synth = new Tone.DuoSynth().connect(gainNode2);
+
+     const synth = new Tone.MonoSynth({
+        oscillator: {
+            type: "sine2"
+        },
+        envelope: {
+            attack: 0.5,
+            decay: 0.3,
+            sustain: 1.0,
+            release: 0.8
+        }
+    }).connect(gainNode2); 
+
     const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
 
  
@@ -678,7 +696,7 @@ var getFrequency3 = function (note, transpose) {
 ////////////////////////////////////////////////////////////////////////
 ////////// INTERACTING with HTML file //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-document.getElementById("playAudio").addEventListener("click", function(){
+/* document.getElementById("playAudio").addEventListener("click", function(){
    
     
     
@@ -693,7 +711,7 @@ document.getElementById("playAudio").addEventListener("click", function(){
     synth.triggerRelease();
   }
 
-});
+}); */
 
 /* document.getElementById("playAudio2").addEventListener("click", function(){
 
@@ -722,10 +740,12 @@ document.getElementById("mute").addEventListener("click", function(){
   if(this.className == 'is-playing'){
     this.className = "",
     this.innerHTML = "MUTE",
+    gainNode2.gain.rampTo(0.5, 0.2),
     gainNode.gain.rampTo(0.5, 0.2);
   }else{
     this.className = "is-playing",
     this.innerHTML = "UNMUTE",
+    gainNode2.gain.rampTo(0, 0.2),
     gainNode.gain.rampTo(0, 0.2);
 
   }
