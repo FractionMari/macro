@@ -289,6 +289,7 @@ function capture() {
             pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
             if (score > 8)
+                gainNode2.gain.rampTo(0, 0.2),
                 pitchShift.pitch = Math.floor(score / 4);
 
             
@@ -599,11 +600,12 @@ var playerBuffers = new Tone.Buffers({
     
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toMaster();
+    const gainNode2 = new Tone.Gain().toMaster();
     const autoFilter = new Tone.AutoWah().connect(gainNode);
     const pitchShift = new Tone.PitchShift();
     const freeverb = new Tone.JCReverb().connect(gainNode);
     const delay = new Tone.FeedbackDelay(0.5);
-    const synth = new Tone.DuoSynth().chain(delay, autoFilter);
+    const synth = new Tone.DuoSynth().connect(gainNode2);
     const plucky = new Tone.PluckSynth().chain(delay, autoFilter);
 
  
