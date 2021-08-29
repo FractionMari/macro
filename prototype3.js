@@ -286,7 +286,7 @@ function capture() {
             autoFilter.Q.value = score / 40;
             autoFilter.wet.value = xValue;
             freeverb.wet.value = 0.1;
-            //pitchShift.pitch = 0;
+            pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
             gainNode.gain.rampTo((score / 16), 0.2);
             //console.log(((i * (-1)) / 4) + 32);
@@ -296,12 +296,11 @@ function capture() {
 
             synth.triggerAttackRelease(scaleSelect[(((i * (-1)) / 4) + 32)], "2n");
 
-            if (score == 15)
+            if (score > 5)
                 pitchShift.pitch = 3;
 
 
-                else if (score == 1)
-                pitchShift.pitch = 0;
+
 
 			}
 
