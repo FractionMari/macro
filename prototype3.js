@@ -286,7 +286,7 @@ function capture() {
             autoFilter.Q.value = score / 40;
             autoFilter.wet.value = xValue;
             freeverb.wet.value = 0.1;
-            pitchShift.pitch = 0;
+            //pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
             gainNode.gain.rampTo((score / 32), 0.2);
             console.log(((i * (-1)) / 4) + 32);
