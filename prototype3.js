@@ -288,7 +288,7 @@ function capture() {
             freeverb.wet.value = 0.1;
             pitchShift.pitch = 0;
             //freeverb.roomsize = score / 32;
-            gainNode.gain.rampTo((score / 16), 0.2);
+            //gainNode.gain.rampTo((score / 16), 0.2);
             //console.log(((i * (-1)) / 4) + 32);
             console.log(score);
             //pitchShift.pitch = Math.floor(score / 4);
