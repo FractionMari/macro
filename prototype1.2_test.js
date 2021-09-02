@@ -46,9 +46,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     const synth = new Tone.FMSynth().connect(gainSynth1);
     const synth2 = new Tone.Sampler({
         urls: {
-            C1: "piano1.mp3",
+            A1: "piano1.mp3",
+            A2: "piano2.mp3",
         },
-        baseUrl: "./samples/",
+        baseUrl: "samples/",
    
     });
     const synth3 = new Tone.MembraneSynth();
