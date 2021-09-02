@@ -56,7 +56,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     const synth4 = new Tone.DuoSynth();
 
     /// Yellow line of synths:
-    const synth5 = new Tone.FMSynth().connect(gainSynth2);
+  //  const synth5 = new Tone.FMSynth().connect(gainSynth2);
+    const synth5 = new Tone.MonoSynth({
+        oscillator: {
+            type: "sine"
+        },
+        envelope: {
+            attack: 0.5,
+            decay: 0.3,
+            sustain: 1.0,
+            release: 0.8
+        }
+    }).connect(gainSynth2);
+
     const synth6 = new Tone.Sampler({
         urls: {
             A1: "A1.mp3",
@@ -735,7 +747,7 @@ function processDiff3(diffImageData3) {
 
 // skriv in ting her
             
-console.log(i);
+//console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 20)
                 synth5.triggerAttackRelease("E3", "4n"),
