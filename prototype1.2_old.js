@@ -29,17 +29,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
     
     ///////// TONE.JS VARIABLES ///////////
-    
-    // gain:
     const gainNode = new Tone.Gain().toDestination();
-    const gainSynth1 = new Tone.Gain().toDestination();
-    const gainSynth2 = new Tone.Gain().toDestination();
-
-    gainNode.gain.value = 0.3;
-    gainSynth1.gain.value = 0.3;
-    gainSynth2.gain.value = 0.3;
-
-    // effects
+    const pitchShift = new Tone.PitchShift().connect(gainNode);
     const pingPong = new Tone.PingPongDelay().connect(gainNode);
     const cheby = new Tone.Chebyshev().connect(gainNode);
     const phaser = new Tone.Phaser({
@@ -49,23 +40,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     }).connect(gainNode);
     const shift = new Tone.FrequencyShifter().connect(gainNode);
     
-    // devide four effects by four to not exceed 100
-    pingPong.wet.value = 0.25;
-    cheby.wet.value = 0.25;
-    phaser.wet.value = 0.25;
-    shift.wet.value = 0.25;
+    const gainSynth1 = new Tone.Gain().connect(gainNode);
+    const gainSynth2 = new Tone.Gain().connect(gainNode);
 
-    const synth = new Tone.MonoSynth({
-        oscillator: {
-            type: "square2"
-        },
-        envelope: {
-            attack: 0.5,
-            decay: 0.3,
-            sustain: 1.0,
-            release: 0.8
-        }
-    }).connect(gainSynth1);
+    const synth = new Tone.FMSynth().connect(gainSynth1);
     const synth2 = new Tone.Sampler({
         urls: {
             A1: "A1.mp3",
@@ -74,40 +52,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         baseUrl: "https://tonejs.github.io/audio/casio/",
    
     });
-    const synth3 = new Tone.MembraneSynth({
-        detune : 0.1,
-        pitchDecay : 0.1,
-        volume : 0.1
-    });
+    const synth3 = new Tone.MembraneSynth();
     const synth4 = new Tone.DuoSynth();
 
     /// Yellow line of synths:
-  //  const synth5 = new Tone.FMSynth().connect(gainSynth2);
-    const synth5 = new Tone.MonoSynth({
-        oscillator: {
-            type: "sine2"
-        },
-        envelope: {
-            attack: 0.5,
-            decay: 0.3,
-            sustain: 1.0,
-            release: 0.8
-        }
-    }).connect(gainSynth2);
-
+    const synth5 = new Tone.FMSynth().connect(gainSynth2);
     const synth6 = new Tone.Sampler({
         urls: {
-            A1: "piano1.mp3",
-            A2: "piano2.mp3",
+            A1: "A1.mp3",
+            A2: "A2.mp3",
         },
-        baseUrl: "samples/",
+        baseUrl: "https://tonejs.github.io/audio/casio/",
    
     });
-    const synth7 = new Tone.MembraneSynth({
-        detune : 0.9,
-        pitchDecay : 0.8,
-        volume : 0.1
-    });
+    const synth7 = new Tone.MembraneSynth();
     const synth8 = new Tone.DuoSynth();
 
 /*     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster(); */
@@ -298,16 +256,12 @@ document.getElementById("mute").addEventListener("click", function(){
   if(this.className == 'is-playing'){
     this.className = "";
     this.innerHTML = "MUTE"
-    gainNode.gain.rampTo(0.3, 0.2);
-    gainSynth1.gain.rampTo(0.3, 0.2);
-    gainSynth2.gain.rampTo(0.3, 0.2);
+    gainNode.gain.rampTo(0.5, 0.2);
   }else{
     this.className = "is-playing";
     this.innerHTML = "UNMUTE";
 
     gainNode.gain.rampTo(0, 0.2);
-    gainSynth1.gain.rampTo(0, 0.2);
-    gainSynth2.gain.rampTo(0, 0.2);
 
   }
 
@@ -318,10 +272,7 @@ var slider = document.getElementById("volume");
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
     console.log(this.value);
-    gainNode.gain.rampTo((this.value / 3), 0.2);
-    gainSynth1.gain.rampTo((this.value / 3), 0.2);
-    gainSynth2.gain.rampTo((this.value / 3), 0.2);
-    
+    gainNode.gain.rampTo(this.value, 0.2);
 }
 
 /// DiffCam Variables:
@@ -647,12 +598,11 @@ function capture() {
             
             let chebyValue = Math.floor((xValue / 10) * 100);
             let harmonicityValue = Math.floor((xValue / 10) * 20);
-            console.log(chebyValue / 100);
+            //console.log(chebyValue);
            cheby.order = chebyValue;
            shift.frequency.value = xValue * 50;
            synth4.harmonicity.value = chebyValue;
            synth8.harmonicity.value = harmonicityValue;
-           //synth7.pitchDecay = chebyValue / 100;
            
 
             //phaser.baseFrequency.rampTo(xValue, 0.2);
@@ -785,7 +735,7 @@ function processDiff3(diffImageData3) {
 
 // skriv in ting her
             
-//console.log(i);
+console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 20)
                 synth5.triggerAttackRelease("E3", "4n"),
