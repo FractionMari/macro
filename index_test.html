@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Macro app v. 1.1</title>
+
+		<link href="macro.css" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@200&display=swap" rel="stylesheet">
+	</head>
+	<body>
+<script src="https://tonejs.github.io/build/Tone.js"></script>
+
+<h1> Macro app 1<h2>
+<div class="center">
+	<div class="topnav">
+    	<a class="active" href="./index.html">App 1</a>
+    	<a href="./prototype2.html"> App 2</a>
+    	<a href="./prototype3.html">App 3</a>
+		<a href="./feedback.html">Feedback?</a>
+		<button type="button" class="collapsible" id="helpButton">?</button>
+	    	<div class="content">
+      			<p>How to use this app:
+          			<div class="dots">    
+						<li> Turn on your webcamera</li>
+						<li> Turn on your sound</li>
+						<li> Make movement to activate sound</li>
+      				</div>
+    		</div> 
+  	</div>
+
+	<div class="wrapper">
+		<figure>
+			<video id="video" width="900" height="500"></video>
+		</figure>
+		<figure>
+			<canvas id="motion" width="900" height="500"></canvas>
+		</figure>
+		<figure>
+			<canvas id="motion2" width="900" height="500"></canvas>
+		</figure>
+		<figure>
+			<canvas id="motion3" width="900" height="500"></canvas>
+		</figure>
+	</div>
+
+
+<button id="effect1">Phaser</button>
+<button id="effect2">PingPong</button>
+<button id="effect3">Cheby</button>
+<button id="effect4">Shift</button>
+<button id="playAudio3">FM Synth</button>
+<button id="playAudio2">FM Synth</button>
+
+<div class="slidecontainer">
+  <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="volume">
+  <button id="mute">MUTE</button>
+</div>
+</div>
+
+    <div id="containerHidden">
+<H1> Hidden span variables:	</H1><span id="score2">?</span><span id="score">?</span>Pitch2: <span id="score3">?</span>
+<br>
+	</div>
+	<br>
+           <a href= "https://github.com/FractionMari/macro"><img src="./GitHub-Mark-Light-64px.png" width="32px"></a>
+     <a rel="license"
+     href="http://creativecommons.org/licenses/by-nc/4.0/">
+     <img alt="Creative Commons License" style="border-width:0" 
+     src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>
+     <br /> 
+		<script src="prototype1.2_test.js"></script>
+		<script src="adapter-1.0.7.js"></script>
+		<script src="diffcam3.js"></script>
+		<script>
+          var coll = document.getElementsByClassName("collapsible");
+          var i;
+          
+
+          for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+              this.classList.toggle("active");
+              var content = this.nextElementSibling;
+              if (content.style.display === "block") {
+                content.style.display = "none";
+              } else {
+                content.style.display = "block";
+              }
+            });
+          }
+        </script>
+
+	</body>
+</html>
